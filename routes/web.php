@@ -11,25 +11,33 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->group(['namespace' => 'Api'], function () use ($router) {
+    $router->get('/', [
+        'as' => 'api.welcome',
+        'uses' => 'DefaultApiController@showWelcomeMessage',
+    ]);
 
-$router->get('requests', function () use ($router) {
-    return 'get.requests';
-});
-$router->get('requests/{requestId:[0-9]+}', function ($requestId) use ($router) {
-    return "get.requests.{$requestId}";
-});
-$router->post('requests', function () use ($router) {
-    return 'post.requests';
-});
+    $router->get('requests', [
+        'as' => 'api.requests.index',
+        'uses' => 'RequestApiController@indexAllRequests',
+    ]);
+    $router->get('requests/{requestId:[0-9]+}', [
+        'as' => 'api.requests.show',
+        'uses' => 'RequestApiController@showSingleRequest',
+    ]);
+    $router->post('requests', [
+        'as' => 'api.requests.store',
+        'uses' => 'RequestApiController@storeRequest',
+    ]);
 
-$router->group(['prefix' => 'requests/{requestId:[0-9]+}'], function ($requestId) use ($router) {
-    $router->get('responses', function ($requestId) use ($router) {
-        return "get.requests.{$requestId}.responses";
-    });
-    $router->get('responses/{responseId:[0-9]+}', function ($requestId, $responseId) use ($router) {
-        return "get.requests.{$requestId}.responses.{$responseId}";
+    $router->group(['prefix' => 'requests/{requestId:[0-9]+}'], function ($requestId) use ($router) {
+        $router->get('responses', [
+            'as' => 'api.responses.index',
+            'uses' => 'ResponseApiController@indexAllResponsesByRequest',
+        ]);
+        $router->get('responses/{responseId:[0-9]+}', [
+            'as' => 'api.responses.show',
+            'uses' => 'ResponseApiController@showSingleResponseByRequest',
+        ]);
     });
 });

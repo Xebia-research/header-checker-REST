@@ -5,26 +5,73 @@ use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class ApiEndpointTest extends TestCase
 {
-    /**
-     * @dataProvider dpApiEndpoints
-     */
-    public function testAvailableApiEndpoints($method, $url, $response)
+    public function testShowWelcomeMessage()
     {
-        $this->{$method}($url);
-
-        $this->assertEquals(
-            $response, $this->response->getContent()
-        );
+        $this->get('/')
+            ->seeJsonEquals([
+                'hello' => 'world',
+            ]);
     }
 
-    public function dpApiEndpoints()
+    public function testIndexAllRequests()
     {
-        return [
-            ['get', 'requests', 'get.requests'],
-            ['get', 'requests/123', 'get.requests.123'],
-            ['post', 'requests', 'post.requests'],
-            ['get', 'requests/123/responses', 'get.requests.123.responses'],
-            ['get', 'requests/123/responses/456', 'get.requests.123.responses.456'],
-        ];
+        $this->get('requests')
+            ->seeJsonEquals([
+                'data' => [
+                    123, 456, 789,
+                ],
+            ]);
+    }
+
+    public function testShowSingleRequest()
+    {
+        $requestId = rand();
+
+        $this->get("requests/{$requestId}")
+            ->seeJsonEquals([
+                'request' => $requestId,
+            ]);
+    }
+
+    public function testStoreRequest()
+    {
+        $this->post('requests', [
+                'this' => 'works',
+            ])->seeJsonEquals([
+                'created' => true,
+            ]);
+    }
+
+    public function testFailedCreatingStoreRequest()
+    {
+        $this->post('requests', [
+                'this' => 'burps',
+            ])->seeJsonEquals([
+                'created' => false,
+            ]);
+    }
+
+    public function testIndexAllResponsesByRequest()
+    {
+        $requestId = rand();
+
+        $this->get("requests/{$requestId}/responses")
+            ->seeJsonEquals([
+                'data' => [
+                    123, 456, 789,
+                ],
+            ]);
+    }
+
+    public function testShowSingleResponseByRequest()
+    {
+        $requestId = rand();
+        $responseId = rand();
+
+        $this->get("requests/{$requestId}/responses/{$responseId}")
+            ->seeJsonEquals([
+                'request' => $requestId,
+                'response' => $responseId,
+            ]);
     }
 }
