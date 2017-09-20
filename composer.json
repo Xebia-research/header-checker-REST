@@ -12,7 +12,8 @@
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "phpunit/phpunit": "~6.0",
-        "mockery/mockery": "~0.9"
+        "mockery/mockery": "~0.9",
+        "barryvdh/laravel-ide-helper": "^2.4"
     },
     "autoload": {
         "psr-4": {
@@ -27,7 +28,16 @@
     },
     "scripts": {
         "post-root-package-install": [
-            "php -r \"copy('.env.example', '.env');\""
+            "php -r \"copy('.env.example', '.env');\"",
+            "@composer ide-helper"
+        ],
+        "dev-update": [
+            "@composer update",
+            "@composer ide-helper"
+        ],
+        "ide-helper": [
+            "php artisan ide-helper:generate",
+            "php artisan ide-helper:meta"
         ]
     },
     "minimum-stability": "dev",
