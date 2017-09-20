@@ -14,3 +14,22 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->get('requests', function () use ($router) {
+    return 'get.requests';
+});
+$router->get('requests/{requestId:[0-9]+}', function ($requestId) use ($router) {
+    return "get.requests.{$requestId}";
+});
+$router->post('requests', function () use ($router) {
+    return 'post.requests';
+});
+
+$router->group(['prefix' => 'requests/{requestId:[0-9]+}'], function ($requestId) use ($router) {
+    $router->get('responses', function ($requestId) use ($router) {
+        return "get.requests.{$requestId}.responses";
+    });
+    $router->get('responses/{responseId:[0-9]+}', function ($requestId, $responseId) use ($router) {
+        return "get.requests.{$requestId}.responses.{$responseId}";
+    });
+});
