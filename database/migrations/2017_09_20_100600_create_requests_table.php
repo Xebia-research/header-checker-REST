@@ -16,8 +16,7 @@ class CreateRequestsTable extends Migration
         Schema::create('requests', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('endpoint_id')
-                ->unsigned();
+            $table->unsignedInteger('endpoint_id');
             $table->foreign('endpoint_id')
                 ->references('id')->on('endpoints');
 

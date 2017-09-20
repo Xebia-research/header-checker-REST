@@ -21,8 +21,8 @@ class CreateRequestHeadersTable extends Migration
             $table->foreign('request_id')
                 ->references('id')->on('requests');
 
-            $table->string('name');
-            $table->string('value');
+            $table->mediumText('name');
+            $table->mediumText('value');
 
             $table->timestamps();
         });

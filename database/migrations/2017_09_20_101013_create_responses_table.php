@@ -21,7 +21,7 @@ class CreateResponsesTable extends Migration
             $table->foreign('request_id')
                 ->references('id')->on('requests');
 
-            $table->smallInteger('status_code');
+            $table->unsignedSmallInteger('status_code');
             $table->string('reason_phrase');
 
             $table->timestamps();

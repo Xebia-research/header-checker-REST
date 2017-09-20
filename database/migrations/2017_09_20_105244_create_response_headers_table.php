@@ -21,8 +21,8 @@ class CreateResponseHeadersTable extends Migration
             $table->foreign('response_id')
                 ->references('id')->on('responses');
 
-            $table->string('name');
-            $table->string('value')
+            $table->mediumText('name');
+            $table->mediumText('value')
                 ->nullable();
 
             $table->timestamps();
