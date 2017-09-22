@@ -29,17 +29,6 @@ $router->group(['namespace' => 'Api'], function () use ($router) {
         'as' => 'api.requests.store',
         'uses' => 'RequestApiController@storeRequest',
     ]);
-
-    $router->group(['prefix' => 'requests/{requestId:[0-9]+}'], function ($requestId) use ($router) {
-        $router->get('responses', [
-            'as' => 'api.responses.index',
-            'uses' => 'ResponseApiController@indexAllResponsesByRequest',
-        ]);
-        $router->get('responses/{responseId:[0-9]+}', [
-            'as' => 'api.responses.show',
-            'uses' => 'ResponseApiController@showSingleResponseByRequest',
-        ]);
-    });
 });
 
 $router->get('/check/{url}', 'Api\RequestApiController@check');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Parsers\HeaderParser;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class RequestApiController extends Controller
 {
@@ -20,24 +21,30 @@ class RequestApiController extends Controller
 
     public function indexAllRequests(): JsonResponse
     {
-        return response()->json([
-            'data' => [
-                123, 456, 789,
-            ],
-        ]);
+        $requests = \App\Request::all();
+
+        return response()->json($requests);
     }
 
     public function showSingleRequest(int $requestId): JsonResponse
     {
-        return response()->json([
-            'request' => $requestId,
-        ]);
+        $request = \App\Request::findOrFail($requestId);
+
+        return response()->json($request);
     }
 
-    public function storeRequest(Request $request): JsonResponse
+    public function storeRequest(Request $request): Response
     {
-        return response()->json([
-            'created' => ($request->input('this') == 'works'),
+        $this->validate($request, [
+            'url' => 'required|url',
+            'method' => 'required|in:GET,HEAD,POST,PUT,DELETE,CONNECT,OPTIONS,TRACE,PATCH',
+        ]);
+
+        $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
+        $endpointRequest = $endpoint->requests()->create();
+
+        return response('', 201)->withHeaders([
+            'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
         ]);
     }
 
