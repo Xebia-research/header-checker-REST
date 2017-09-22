@@ -41,3 +41,5 @@ $router->group(['namespace' => 'Api'], function () use ($router) {
         ]);
     });
 });
+
+$router->get('/check/{url}', 'Api\RequestApiController@check');
