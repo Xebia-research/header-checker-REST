@@ -1,0 +1,167 @@
+<?php
+
+namespace App\Parsers;
+
+use App\Parsers\Exceptions\FailedFetchingResponseHeadersException;
+use App\Parsers\RequestHeaderParser\Entities\Header;
+use App\Parsers\RequestHeaderParser\Entities\Response;
+
+class RequestHeaderParser
+{
+    /**
+     * Allowed methods.
+     *
+     * @var array
+     */
+    private static $allowedMethods = [
+        'GET',
+        'HEAD',
+        'POST',
+        'PUT',
+        'DELETE',
+        'CONNECT',
+        'OPTIONS',
+        'TRACE',
+        'PATCH',
+    ];
+
+    /**
+     * Method that should be used to execute the HTTP request.
+     *
+     * @var string
+     */
+    private $method;
+
+    /**
+     * Url that should be used to execute the HTTP request.
+     *
+     * @var string
+     */
+    private $url;
+
+    /**
+     * The response headers from the HTTP request.
+     *
+     * @var array
+     */
+    private $headers;
+
+    /**
+     * @param $method
+     * @throws InvalidEndpointMethodException
+     */
+    public function setMethod($method)
+    {
+        if (!in_array($method, static::$allowedMethods)) {
+            throw new InvalidEndpointMethodException();
+        }
+
+        $this->method = $method;
+    }
+
+    /**
+     * @param $url
+     * @throws InvalidEndpointUrlException
+     */
+    public function setUrl($url)
+    {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new InvalidEndpointUrlException();
+        }
+
+        $this->url = $url;
+    }
+
+    /**
+     * Execute request and parse responses with headers.
+     *
+     * @return Response[]
+     */
+    public function getResponses(): array
+    {
+        $this->execute();
+
+        /* @var Response[] $responses */
+        $responses = [];
+        foreach ($this->headers as $headerName => $headerValue) {
+            if (!is_int($headerName)) continue;
+
+            $response = new Response;
+            $response->setStatusCode($this->getStatusCode($headerValue));
+            $response->setReasonPhrase($headerValue);
+
+            array_push($responses, $response);
+        }
+
+        $currentResponseIndex = 0;
+        foreach ($this->headers as $headerName => $headerValue) {
+            if (is_int($headerName)) {
+                $currentResponseIndex = $headerName;
+
+                continue;
+            }
+
+            if (is_array($headerValue)) {
+                foreach ($headerValue as $responseIndex => $value) {
+                    $header = new Header;
+                    $header->setName($headerName);
+                    $header->setValue($value);
+
+                    $responses[$responseIndex]->addHeader($header);
+                }
+            } else {
+                $header = new Header;
+                $header->setName($headerName);
+                $header->setValue($headerValue);
+
+                $responses[$currentResponseIndex]->addHeader($header);
+            }
+        }
+
+        return $responses;
+    }
+
+    /**
+     * Get status code by HTTP reason phrase.
+     *
+     * @param $reasonPhrase
+     * @return int
+     */
+    private function getStatusCode($reasonPhrase): int
+    {
+        preg_match('/[0-9]{3}/', $reasonPhrase, $matches);
+
+        return $matches[0];
+    }
+
+    /**
+     * Execute HTTP request to url with request method.
+     *
+     * @throws FailedFetchingResponseHeadersException
+     */
+    private function execute()
+    {
+        if (!$this->method || !$this->url) return;
+
+        try {
+            stream_context_set_default([
+                'http' => [
+                    'method' => $this->method,
+                ],
+            ]);
+
+            $this->headers = get_headers($this->url, 1);
+        } catch (\Exception $exception) {
+            throw new FailedFetchingResponseHeadersException($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param string $glue
+     * @return string
+     */
+    public static function getAllowedMethods(string $glue=','): string
+    {
+        return implode($glue, static::$allowedMethods);
+    }
+}
