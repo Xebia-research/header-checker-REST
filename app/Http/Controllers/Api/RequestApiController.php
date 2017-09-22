@@ -21,10 +21,10 @@ class RequestApiController extends Controller
     {
         //Retrieve the headers and store in an array
         $header = HeaderParser::getAllHeaders($url);
-        return view
-        ('master', [
-            'url' => $url,
-            'header' => $header
+
+        return view('master', [
+            'url'    => $url,
+            'header' => $header,
         ]);
     }
 }
