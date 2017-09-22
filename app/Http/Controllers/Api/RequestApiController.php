@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Jobs\ExecuteRequestJob;
+use App\Parsers\RequestHeaderParser;
 use Illuminate\Http\Request;
-use App\Parsers\HeaderParser;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -37,26 +38,16 @@ class RequestApiController extends Controller
     {
         $this->validate($request, [
             'url' => 'required|url',
-            'method' => 'required|in:GET,HEAD,POST,PUT,DELETE,CONNECT,OPTIONS,TRACE,PATCH',
+            'method' => 'required|in:'. RequestHeaderParser::getAllowedMethods(),
         ]);
 
         $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
         $endpointRequest = $endpoint->requests()->create();
 
+        $this->dispatch(new ExecuteRequestJob($endpointRequest));
+
         return response('', 201)->withHeaders([
             'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
-        ]);
-    }
-
-    // Function that uses the given url to return the resolved headers
-    public function check($url)
-    {
-        //Retrieve the headers and store in an array
-        $header = HeaderParser::getAllHeaders($url);
-
-        return view('master', [
-            'url'    => $url,
-            'header' => $header,
         ]);
     }
 }

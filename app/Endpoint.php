@@ -24,11 +24,11 @@ class Endpoint extends Model
     ];
 
     /**
-     * Relationship between nndpoint and requests.
+     * Relationship between endpoint and requests.
      *
      * @return HasMany
      */
-    public function requests() : HasMany
+    public function requests(): HasMany
     {
         return $this->hasMany(Request::class);
     }
