@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use App\Parsers\HeaderParser;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Parsers\HeaderParser;
 
 class RequestApiController extends Controller
 {
