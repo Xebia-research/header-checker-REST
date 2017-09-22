@@ -152,3 +152,10 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/composer,laravel,macos,osx,phpstorm,windows
+
+# barryvdh/laravel-ide-helper
+.phpstorm.meta.php
+_ide_helper.php
+
+# PHPStorm
+.idea

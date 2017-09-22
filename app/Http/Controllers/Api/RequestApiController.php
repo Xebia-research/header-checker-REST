@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Parsers\HeaderParser;
 
@@ -16,6 +18,29 @@ class RequestApiController extends Controller
     {
     }
 
+    public function indexAllRequests(): JsonResponse
+    {
+        return response()->json([
+            'data' => [
+                123, 456, 789,
+            ],
+        ]);
+    }
+
+    public function showSingleRequest(int $requestId): JsonResponse
+    {
+        return response()->json([
+            'request' => $requestId,
+        ]);
+    }
+
+    public function storeRequest(Request $request): JsonResponse
+    {
+        return response()->json([
+            'created' => ($request->input('this') == 'works'),
+        ]);
+    }
+
     // Function that uses the given url to return the resolved headers
     public function check($url)
     {
@@ -28,8 +53,3 @@ class RequestApiController extends Controller
         ]);
     }
 }
-
-//
-// Re-analizeHeaders
-// Check
-// GetReport
