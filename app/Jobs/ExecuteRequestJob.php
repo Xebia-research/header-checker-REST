@@ -25,6 +25,10 @@ class ExecuteRequestJob extends Job
         $this->request = $request;
     }
 
+    /**
+     * Create RequestHeaderParser instance and set method and url.
+     * Get responses from RequestHeaderParser and save them in the database.
+     */
     public function handle()
     {
         $endpoint = $this->request->endpoint;

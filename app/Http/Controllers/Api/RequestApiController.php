@@ -12,14 +12,10 @@ use Illuminate\Http\Response;
 class RequestApiController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Find all requests in the database.
      *
-     * @return void
+     * @return JsonResponse
      */
-    public function __construct()
-    {
-    }
-
     public function indexAllRequests(): JsonResponse
     {
         $requests = \App\Request::all();
@@ -27,6 +23,13 @@ class RequestApiController extends Controller
         return response()->json($requests);
     }
 
+    /**
+     * Find request in the database.
+     * Throwed 404 when request is not found.
+     *
+     * @param int $requestId
+     * @return JsonResponse
+     */
     public function showSingleRequest(int $requestId): JsonResponse
     {
         $request = \App\Request::findOrFail($requestId);
@@ -34,6 +37,15 @@ class RequestApiController extends Controller
         return response()->json($request);
     }
 
+    /**
+     * Validate if parameters are valid.
+     * Find or create endpoint based on url and method.
+     * Create a new request for the endpoint.
+     * Dispatch ExecuteRequestJob
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function storeRequest(Request $request): Response
     {
         $this->validate($request, [
