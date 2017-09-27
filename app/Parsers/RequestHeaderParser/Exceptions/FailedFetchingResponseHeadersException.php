@@ -2,14 +2,13 @@
 
 namespace App\Parsers\Exceptions;
 
-use \Exception;
+use Exception;
 use Throwable;
 
 class FailedFetchingResponseHeadersException extends Exception
 {
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
+    public function __construct($message = '', $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
-
 }

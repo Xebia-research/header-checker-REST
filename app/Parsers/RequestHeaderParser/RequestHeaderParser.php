@@ -2,9 +2,9 @@
 
 namespace App\Parsers;
 
-use App\Parsers\Exceptions\FailedFetchingResponseHeadersException;
 use App\Parsers\RequestHeaderParser\Entities\Header;
 use App\Parsers\RequestHeaderParser\Entities\Response;
+use App\Parsers\Exceptions\FailedFetchingResponseHeadersException;
 
 class RequestHeaderParser
 {
@@ -52,7 +52,7 @@ class RequestHeaderParser
      */
     public function setMethod($method)
     {
-        if (!in_array($method, static::$allowedMethods)) {
+        if (! in_array($method, static::$allowedMethods)) {
             throw new InvalidEndpointMethodException();
         }
 
@@ -65,7 +65,7 @@ class RequestHeaderParser
      */
     public function setUrl($url)
     {
-        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
             throw new InvalidEndpointUrlException();
         }
 
@@ -84,7 +84,9 @@ class RequestHeaderParser
         /* @var Response[] $responses */
         $responses = [];
         foreach ($this->headers as $headerName => $headerValue) {
-            if (!is_int($headerName)) continue;
+            if (! is_int($headerName)) {
+                continue;
+            }
 
             $response = new Response;
             $response->setStatusCode($this->getStatusCode($headerValue));
@@ -141,7 +143,9 @@ class RequestHeaderParser
      */
     private function execute()
     {
-        if (!$this->method || !$this->url) return;
+        if (! $this->method || ! $this->url) {
+            return;
+        }
 
         try {
             stream_context_set_default([
@@ -160,7 +164,7 @@ class RequestHeaderParser
      * @param string $glue
      * @return string
      */
-    public static function getAllowedMethods(string $glue=','): string
+    public static function getAllowedMethods(string $glue = ','): string
     {
         return implode($glue, static::$allowedMethods);
     }
