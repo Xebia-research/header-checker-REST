@@ -143,8 +143,11 @@ class RequestHeaderParser
      */
     private function execute()
     {
-        if (! $this->method || ! $this->url) {
-            return;
+        if (! $this->method) {
+            throw new InvalidEndpointUrlException();
+        }
+        if (! $this->url) {
+            throw new InvalidEndpointMethodException();
         }
 
         try {
