@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Response extends Model
@@ -15,5 +16,9 @@ class Response extends Model
     public function responseHeaders(): HasMany
     {
         return $this->hasMany(ResponseHeader::class);
+    }
+    public function request():BelongsTo
+    {
+        return $this->belongsTo(Request::class);
     }
 }
