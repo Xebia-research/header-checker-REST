@@ -16,7 +16,7 @@ class RequestTest extends TestCase
         /* @var \App\Request $request */
         $request = \App\Request::first();
 
-        $this->get('requests/' . $request->id)
+        $this->get('requests/'.$request->id)
             ->seeJsonEquals($request->toArray());
     }
 }
