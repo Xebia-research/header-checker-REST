@@ -13,7 +13,6 @@ before_script:
   - mysql -e 'create database `header-checker-rest`;'
   - composer self-update
   - composer install --no-interaction
-  - php artisan migrate:refresh
 
 script:
   - composer validate --strict
