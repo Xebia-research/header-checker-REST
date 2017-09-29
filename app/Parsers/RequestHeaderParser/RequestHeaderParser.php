@@ -131,7 +131,7 @@ class RequestHeaderParser
      */
     private function getStatusCode($reasonPhrase): int
     {
-        preg_match('/[0-9]{3}/', $reasonPhrase, $matches);
+        preg_match('/[1-5][0-9]{2}/', $reasonPhrase, $matches);
 
         return $matches[0];
     }
