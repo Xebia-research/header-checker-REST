@@ -13,7 +13,7 @@ class RequestHeaderParser
      *
      * @var array
      */
-    private static $allowedMethods = [
+    public static $allowedMethods = [
         'GET',
         'HEAD',
         'POST',
