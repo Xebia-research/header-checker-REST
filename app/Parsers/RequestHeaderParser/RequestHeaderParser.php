@@ -13,7 +13,7 @@ class RequestHeaderParser
      *
      * @var array
      */
-    public static $allowedMethods = [
+    private static $allowedMethods = [
         'GET',
         'HEAD',
         'POST',
@@ -164,10 +164,18 @@ class RequestHeaderParser
     }
 
     /**
+     * @return array
+     */
+    public static function getAllowedMethods(): array
+    {
+        return self::$allowedMethods;
+    }
+
+    /**
      * @param string $glue
      * @return string
      */
-    public static function getAllowedMethods(string $glue = ','): string
+    public static function getAllowedMethodsImploded(string $glue = ','): string
     {
         return implode($glue, static::$allowedMethods);
     }

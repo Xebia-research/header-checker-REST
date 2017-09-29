@@ -13,7 +13,7 @@ class StoreRequestTest extends TestCase
     public function testShouldRespondUnprocessableEntityWhenUrlIsNotPresent()
     {
         $response = $this->post('requests', [
-            'method' => RequestHeaderParser::$allowedMethods[0],
+            'method' => RequestHeaderParser::getAllowedMethods()[0],
         ]);
         $response->assertResponseStatus(422);
     }
@@ -48,7 +48,7 @@ class StoreRequestTest extends TestCase
     {
         $response = $this->post('requests', [
             'url' => '',
-            'method' => RequestHeaderParser::$allowedMethods[0],
+            'method' => RequestHeaderParser::getAllowedMethods()[0],
         ]);
         $response->assertResponseStatus(422);
     }
@@ -66,7 +66,7 @@ class StoreRequestTest extends TestCase
     {
         $response = $this->post('requests', [
             'url' => 'httpa://www.google.com2/',
-            'method' => RequestHeaderParser::$allowedMethods[0],
+            'method' => RequestHeaderParser::getAllowedMethods()[0],
         ]);
         $response->assertResponseStatus(422);
     }
@@ -82,7 +82,7 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondOkWhenUrlAndMethodAreValid()
     {
-        foreach (RequestHeaderParser::$allowedMethods as $method) {
+        foreach (RequestHeaderParser::getAllowedMethods() as $method) {
             $response = $this->post('requests', [
                 'url' => 'https://www.google.com/',
                 'method' => $method,
