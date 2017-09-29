@@ -13,8 +13,9 @@ class RequestTest extends TestCase
 
     public function testShowSingleRequest()
     {
-        /* @var \App\Request $request */
-        $request = \App\Request::first();
+        /* @var \App\Endpoint $endpoint */
+        $endpoint = \App\Endpoint::create();
+        $request = $endpoint->requests()->create();
 
         $this->get('requests/'.$request->id)
             ->seeJsonEquals($request->toArray());
