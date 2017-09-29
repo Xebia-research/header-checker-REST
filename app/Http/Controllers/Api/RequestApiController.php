@@ -3,53 +3,63 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Parsers\HeaderParser;
+use Illuminate\Http\Response;
+use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Parsers\RequestHeaderParser;
 
 class RequestApiController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Find all requests in the database.
      *
-     * @return void
+     * @return JsonResponse
      */
-    public function __construct()
-    {
-    }
-
     public function indexAllRequests(): JsonResponse
     {
-        return response()->json([
-            'data' => [
-                123, 456, 789,
-            ],
-        ]);
+        $requests = \App\Request::all();
+
+        return response()->json($requests);
     }
 
+    /**
+     * Find request in the database.
+     * Throwed 404 when request is not found.
+     *
+     * @param int $requestId
+     * @return JsonResponse
+     */
     public function showSingleRequest(int $requestId): JsonResponse
     {
-        return response()->json([
-            'request' => $requestId,
-        ]);
+        $request = \App\Request::findOrFail($requestId);
+
+        return response()->json($request);
     }
 
-    public function storeRequest(Request $request): JsonResponse
+    /**
+     * Validate if parameters are valid.
+     * Find or create endpoint based on url and method.
+     * Create a new request for the endpoint.
+     * Dispatch ExecuteRequestJob.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function storeRequest(Request $request): Response
     {
-        return response()->json([
-            'created' => ($request->input('this') == 'works'),
+        $this->validate($request, [
+            'url' => 'required|url',
+            'method' => 'required|in:'.RequestHeaderParser::getAllowedMethods(),
         ]);
-    }
 
-    // Function that uses the given url to return the resolved headers
-    public function check($url)
-    {
-        //Retrieve the headers and store in an array
-        $header = HeaderParser::getAllHeaders($url);
+        $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
+        $endpointRequest = $endpoint->requests()->create();
 
-        return view('master', [
-            'url'    => $url,
-            'header' => $header,
+        $this->dispatch(new ExecuteRequestJob($endpointRequest));
+
+        return response('', 201)->withHeaders([
+            'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
         ]);
     }
 }
