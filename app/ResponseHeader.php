@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ResponseHeader extends Model
 {
-    public function reponse(): BelongsTo
+    /**
+     * Relationship between response headers and response.
+     *
+     * @return BelongsTo
+     */
+    public function response(): BelongsTo
     {
         return $this->belongsTo(Response::class);
     }

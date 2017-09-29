@@ -17,7 +17,13 @@ class Response extends Model
     {
         return $this->hasMany(ResponseHeader::class);
     }
-    public function request():BelongsTo
+
+    /**
+     * Relationship between reponses and request.
+     *
+     * @return BelongsTo
+     */
+    public function request(): BelongsTo
     {
         return $this->belongsTo(Request::class);
     }
