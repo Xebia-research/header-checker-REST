@@ -1,9 +1,7 @@
 language: php
 
 php:
-  - '7.1'
-
-sudo: false
+  - 7.1
 
 cache:
   directories:
@@ -11,8 +9,11 @@ cache:
     - $HOME/.composer/cache
 
 before_script:
+  - cp .env.travis .env
+  - mysql -e 'create database header-checker-rest;'
   - composer self-update
   - composer install --no-interaction
+  - php artisan migrate:refresh
 
 script:
   - composer validate --strict
