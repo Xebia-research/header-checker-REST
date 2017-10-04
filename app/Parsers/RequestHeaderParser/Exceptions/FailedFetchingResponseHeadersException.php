@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Parsers\Exceptions;
+namespace App\Parsers\RequestHeaderParser\Exceptions;
 
 use Exception;
 use Throwable;

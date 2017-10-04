@@ -1,6 +1,6 @@
 <?php
 
-use App\Parsers\RequestHeaderParser;
+use App\Parsers\RequestHeaderParser\RequestHeaderParser;
 
 class StoreRequestTest extends TestCase
 {

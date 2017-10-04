@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Parsers\RequestHeaderParser\RequestHeaderParser;
 use App\Response;
 use App\ResponseHeader;
-use App\Parsers\RequestHeaderParser;
 
 class ExecuteRequestJob extends Job
 {

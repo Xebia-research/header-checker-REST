@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Parsers;
+namespace App\Parsers\RequestHeaderParser;
 
 use App\Parsers\RequestHeaderParser\Entities\Header;
 use App\Parsers\RequestHeaderParser\Entities\Response;
-use App\Parsers\Exceptions\FailedFetchingResponseHeadersException;
+use App\Parsers\RequestHeaderParser\Exceptions\FailedFetchingResponseHeadersException;
+use App\Parsers\RequestHeaderParser\Exceptions\InvalidEndpointMethodException;
+use App\Parsers\RequestHeaderParser\Exceptions\InvalidEndpointUrlException;
 
 class RequestHeaderParser
 {

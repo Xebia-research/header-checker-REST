@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Parsers\RequestHeaderParser\RequestHeaderParser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Parsers\RequestHeaderParser;
 
 class RequestApiController extends Controller
 {
