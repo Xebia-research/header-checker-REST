@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: casper
  * Date: 4-10-2017
- * Time: 11:10
+ * Time: 11:10.
  */
 
 namespace App;
-
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +22,7 @@ class ResponseHeaderFinding extends Model
     {
         return $this->belongsTo(ResponseHeader :: class);
     }
+
     /**
      * Relationship between HeaderRule and ResponseHeaderFind
      * i
@@ -34,6 +34,4 @@ class ResponseHeaderFinding extends Model
     {
         return $this->BelongsTo(HeaderRule :: class);
     }
-
-
 }

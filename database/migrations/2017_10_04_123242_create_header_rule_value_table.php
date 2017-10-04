@@ -22,7 +22,7 @@ class CreateHeaderRuleValueTable extends Migration
             $table->foreign('header_rule_id')
                 ->references('id')->on('header_rules');
 
-            $table->enum('value_type', ['equals','equals_regex']);
+            $table->enum('value_type', ['equals', 'equals_regex']);
             $table->string('value');
 
             $table->timestamps();
