@@ -4,9 +4,9 @@ namespace App\Parsers\RequestHeaderParser;
 
 use App\Parsers\RequestHeaderParser\Entities\Header;
 use App\Parsers\RequestHeaderParser\Entities\Response;
-use App\Parsers\RequestHeaderParser\Exceptions\FailedFetchingResponseHeadersException;
-use App\Parsers\RequestHeaderParser\Exceptions\InvalidEndpointMethodException;
 use App\Parsers\RequestHeaderParser\Exceptions\InvalidEndpointUrlException;
+use App\Parsers\RequestHeaderParser\Exceptions\InvalidEndpointMethodException;
+use App\Parsers\RequestHeaderParser\Exceptions\FailedFetchingResponseHeadersException;
 
 class RequestHeaderParser
 {
