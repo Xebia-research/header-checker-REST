@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ResponseHeader extends Model
 {
     /**
-     * Relationship between response headers and response.
+     * Relationship between Response and ResponseHeader models.
      *
      * @return BelongsTo
      */

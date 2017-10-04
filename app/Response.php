@@ -5,11 +5,22 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Response extends Model
 {
     /**
-     * Relationship between response headers and a response.
+     * Relationship between Request and Response models.
+     *
+     * @return BelongsTo
+     */
+    public function request(): BelongsTo
+    {
+        return $this->belongsTo(Request::class);
+    }
+
+    /**
+     * Relationship between ResponseHeader and Response models.
      *
      * @return HasMany
      */
@@ -19,12 +30,12 @@ class Response extends Model
     }
 
     /**
-     * Relationship between reponses and request.
+     * Relationship between ResponseHeaderFinding and Response models, through ResponseHeader model.
      *
-     * @return BelongsTo
+     * @return HasManyThrough
      */
-    public function request(): BelongsTo
+    public function responseHeaderFindings(): HasManyThrough
     {
-        return $this->belongsTo(Request::class);
+        return $this->hasManyThrough(ResponseHeaderFinding::class, ResponseHeader::class);
     }
 }
