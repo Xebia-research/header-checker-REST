@@ -4,7 +4,10 @@ namespace App\Jobs;
 
 use App\Response;
 use App\ResponseHeader;
-use App\Parsers\RequestHeaderParser;
+use GuzzleHttp\Client;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 
 class ExecuteRequestJob extends Job
 {
@@ -33,22 +36,42 @@ class ExecuteRequestJob extends Job
     {
         $endpoint = $this->request->endpoint;
 
-        $requestHeaderParser = new RequestHeaderParser;
-        $requestHeaderParser->setMethod($endpoint->method);
-        $requestHeaderParser->setUrl($endpoint->url);
+        $client = new Client();
 
-        $requestHeaderParserResponses = $requestHeaderParser->getResponses();
-        foreach ($requestHeaderParserResponses as $requestHeaderParserResponse) {
-            $response = new Response;
-            $response->status_code = $requestHeaderParserResponse->getStatusCode();
-            $response->reason_phrase = $requestHeaderParserResponse->getReasonPhrase();
+        $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
+            $this->handleResponse($response);
+        };
 
-            $this->request->responses()->save($response);
+        $response = $client->request($endpoint->method, $endpoint->url, [
+            'http_errors' => false,
+            'allow_redirects' => [
+                'on_redirect' => $onRedirect,
+            ],
+        ]);
+        $this->handleResponse($response);
+    }
 
-            foreach ($requestHeaderParserResponse->getHeaders() as $header) {
+    private function handleResponse(ResponseInterface $guzzleResponse)
+    {
+        $response = new Response;
+        $response->status_code = $guzzleResponse->getStatusCode();
+        $response->reason_phrase = $guzzleResponse->getReasonPhrase();
+
+        $this->request->responses()->save($response);
+
+        foreach ($guzzleResponse->getHeaders() as $key=>$value) {
+            if (is_array($value)) {
+                foreach ($value as $valueString) {
+                    $responseHeader = new ResponseHeader;
+                    $responseHeader->name = $key;
+                    $responseHeader->value = $valueString;
+
+                    $response->responseHeaders()->save($responseHeader);
+                }
+            } else {
                 $responseHeader = new ResponseHeader;
-                $responseHeader->name = $header->getName();
-                $responseHeader->value = $header->getValue();
+                $responseHeader->name = $key;
+                $responseHeader->value = $value;
 
                 $response->responseHeaders()->save($responseHeader);
             }

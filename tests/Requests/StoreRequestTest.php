@@ -1,7 +1,5 @@
 <?php
 
-use App\Parsers\RequestHeaderParser;
-
 class StoreRequestTest extends TestCase
 {
     public function testShouldRespondUnprocessableEntityWhenUrlAndMethodAreNotPresent()
@@ -12,10 +10,9 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenUrlIsNotPresent()
     {
-        $response = $this->post('requests', [
-            'method' => RequestHeaderParser::getAllowedMethods()[0],
-        ]);
-        $response->assertResponseStatus(422);
+        $this->post('requests', [
+            'method' => \App\Request::getAllowedMethods()[0],
+        ])->assertResponseStatus(422);
     }
 
     public function testShouldRespondUnprocessableEntityWhenMethodIsNotPresent()
@@ -28,11 +25,10 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenUrlAndMethodAreEmpty()
     {
-        $response = $this->post('requests', [
+        $this->post('requests', [
             'url' => '',
             'method' => '',
-        ]);
-        $response->assertResponseStatus(422);
+        ])->assertResponseStatus(422);
     }
 
     public function testShouldRespondUnprocessableEntityWhenUrlAndMethodIsEmpty()
@@ -46,48 +42,43 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenUrlIsEmpty()
     {
-        $response = $this->post('requests', [
+        $this->post('requests', [
             'url' => '',
-            'method' => RequestHeaderParser::getAllowedMethods()[0],
-        ]);
-        $response->assertResponseStatus(422);
+            'method' => \App\Request::getAllowedMethods()[0],
+        ])->assertResponseStatus(422);
     }
 
     public function testShouldRespondUnprocessableEntityWhenMethodIsEmpty()
     {
-        $response = $this->post('requests', [
+        $this->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => '',
-        ]);
-        $response->assertResponseStatus(422);
+        ])->assertResponseStatus(422);
     }
 
     public function testShouldRespondUnprocessableEntityWhenUrlIsInvalid()
     {
-        $response = $this->post('requests', [
+        $this->post('requests', [
             'url' => 'httpa://www.google.com2/',
-            'method' => RequestHeaderParser::getAllowedMethods()[0],
-        ]);
-        $response->assertResponseStatus(422);
+            'method' => \App\Request::getAllowedMethods()[0],
+        ])->assertResponseStatus(422);
     }
 
     public function testShouldRespondUnprocessableEntityWhenMethodIsInvalid()
     {
-        $response = $this->post('requests', [
+        $this->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GOT',
-        ]);
-        $response->assertResponseStatus(422);
+        ])->assertResponseStatus(422);
     }
 
     public function testShouldRespondOkWhenUrlAndMethodAreValid()
     {
-        foreach (RequestHeaderParser::getAllowedMethods() as $method) {
-            $response = $this->post('requests', [
+        foreach (\App\Request::getAllowedMethods() as $method) {
+            $this->post('requests', [
                 'url' => 'https://www.google.com/',
                 'method' => $method,
-            ]);
-            $response->assertResponseStatus(201);
+            ])->assertResponseStatus(201);
         }
     }
 
@@ -109,7 +100,7 @@ class StoreRequestTest extends TestCase
         $this->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GET',
-        ]);
+        ])->assertResponseStatus(201);
     }
 
     public function testShouldRespondWithLocation()
