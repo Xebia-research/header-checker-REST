@@ -7,7 +7,7 @@ use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Parsers\RequestHeaderParser;
+use App\Parsers\RequestHeaderParser\RequestHeaderParser;
 
 class RequestApiController extends Controller
 {

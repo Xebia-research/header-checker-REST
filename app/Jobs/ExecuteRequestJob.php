@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Response;
 use App\ResponseHeader;
-use App\Parsers\RequestHeaderParser;
+use App\Parsers\RequestHeaderParser\RequestHeaderParser;
 
 class ExecuteRequestJob extends Job
 {
