@@ -3,11 +3,11 @@
 namespace App\Jobs;
 
 use App\Response;
-use App\ResponseHeader;
 use GuzzleHttp\Client;
+use App\ResponseHeader;
+use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
 
 class ExecuteRequestJob extends Job
 {
