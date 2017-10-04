@@ -50,7 +50,7 @@ class RequestApiController extends Controller
     {
         $this->validate($request, [
             'url' => 'required|url',
-            'method' => 'required|in:'.RequestHeaderParser::getAllowedMethods(),
+            'method' => 'required|in:'.RequestHeaderParser::getAllowedMethodsImploded(),
         ]);
 
         $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
