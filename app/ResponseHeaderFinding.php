@@ -8,24 +8,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ResponseHeaderFinding extends Model
 {
     /**
-     * Relationship between ResponseHeader and ResponseHeaderFinding.
+     * Relationship between ResponseHeader and ResponseHeaderFinding models.
      *
-     * @return HasMany
+     * @return BelongsTo
      */
-    public function ResponseHeader(): BelongsTo
+    public function responseHeader(): BelongsTo
     {
         return $this->belongsTo(ResponseHeader::class);
     }
 
     /**
-     * Relationship between HeaderRule and ResponseHeaderFind
-     * i
-     * ng.
+     * Relationship between HeaderRule and ResponseHeaderFinding models.
      *
-     * @return HasMany
+     * @return BelongsTo
      */
-    public function HeaderRule(): BelongsTo
+    public function headerRule(): BelongsTo
     {
-        return $this->BelongsTo(HeaderRule :: class);
+        return $this->belongsTo(HeaderRule::class);
     }
 }

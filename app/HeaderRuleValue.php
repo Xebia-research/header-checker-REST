@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class HeaderRuleValue extends Model
 {
     /**
-     * Relationship between HeaderRule and HeaderRuleValue.
+     * Relationship between HeaderRule and HeaderRuleValue models.
      *
-     * @return HasMany
+     * @return BelongsTo
      */
-    public function HeaderRule(): BelongsTo
+    public function headerRule(): BelongsTo
     {
-        return $this->BelongsTo(HeaderRule::class);
+        return $this->belongsTo(HeaderRule::class);
     }
 }

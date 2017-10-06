@@ -18,8 +18,13 @@ class ResponseHeader extends Model
         return $this->belongsTo(Response::class);
     }
 
-    public function ResponseHeaderFinding() : HasMany
+    /**
+     * Relationship between ResponseHeaderFinding and ResponseHeader models.
+     *
+     * @return HasMany
+     */
+    public function responseHeaderFindings(): HasMany
     {
-        return $this->hasMany(ResonseHeaderFinding::class);
+        return $this->hasMany(ResponseHeaderFinding::class);
     }
 }
