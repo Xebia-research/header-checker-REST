@@ -20,6 +20,6 @@ class ResponseHeader extends Model
 
     public function ResponseHeaderFinding() : HasMany
     {
-        return $this->hasMany(ResonseHeaderFinding :: class);
+        return $this->hasMany(ResonseHeaderFinding::class);
     }
 }

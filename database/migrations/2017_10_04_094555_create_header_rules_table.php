@@ -18,7 +18,7 @@ class CreateHeaderRulesTable extends Migration
 
             $table->string('name');
             $table->text('description');
-            $table->enum('rule_type', ['include', 'exclude']);
+            $table->enum('rule_type', ['include', 'exclude'])->nullable();
             $table->unsignedTinyInteger('score');
 
             $table->timestamps();

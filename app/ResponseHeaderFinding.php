@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: casper
- * Date: 4-10-2017
- * Time: 11:10.
- */
 
 namespace App;
 
@@ -20,7 +14,7 @@ class ResponseHeaderFinding extends Model
      */
     public function ResponseHeader(): BelongsTo
     {
-        return $this->belongsTo(ResponseHeader :: class);
+        return $this->belongsTo(ResponseHeader::class);
     }
 
     /**

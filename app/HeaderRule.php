@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: casper
- * Date: 4-10-2017
- * Time: 11:17.
- */
 
 namespace App;
 
@@ -20,7 +14,7 @@ class HeaderRule extends Model
      */
     public function ResponseHeaderFinding(): HasMany
     {
-        return $this->HasMany(ResponsHeaderFinding :: class);
+        return $this->HasMany(ResponsHeaderFinding::class);
     }
 
     /**
