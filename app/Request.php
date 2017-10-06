@@ -10,6 +10,23 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class Request extends Model
 {
     /**
+     * Allowed methods.
+     *
+     * @var array
+     */
+    private static $allowedMethods = [
+        'GET',
+        'HEAD',
+        'POST',
+        'PUT',
+        'DELETE',
+        'CONNECT',
+        'OPTIONS',
+        'TRACE',
+        'PATCH',
+    ];
+
+    /**
      * Relationship between Endpoint and Request models.
      *
      * @return BelongsTo
@@ -37,5 +54,13 @@ class Request extends Model
     public function responseHeaders(): HasManyThrough
     {
         return $this->hasManyThrough(ResponseHeader::class, Response::class);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAllowedMethods(): array
+    {
+        return self::$allowedMethods;
     }
 }
