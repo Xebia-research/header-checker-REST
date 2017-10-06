@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ResponseHeaderFinding extends Model
 {
     /**
-     * Relationship between ResponseHeader and ResponseHeaderFinding.
+     * Relationship between response header findings and response header.
      *
-     * @return HasMany
+     * @return BelongsTo
      */
     public function ResponseHeader(): BelongsTo
     {
@@ -18,14 +18,12 @@ class ResponseHeaderFinding extends Model
     }
 
     /**
-     * Relationship between HeaderRule and ResponseHeaderFind
-     * i
-     * ng.
+     * Relationship between response header findings and header rule.
      *
-     * @return HasMany
+     * @return BelongsTo
      */
     public function HeaderRule(): BelongsTo
     {
-        return $this->BelongsTo(HeaderRule :: class);
+        return $this->BelongsTo(HeaderRule::class);
     }
 }

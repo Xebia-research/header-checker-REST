@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHeaderResponseFindingsTable extends Migration
+class CreateResponseHeaderFindingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreateHeaderResponseFindingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('header_response_findings', function (Blueprint $table) {
+        Schema::create('response_header_findings', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('response_header_id')
                 ->unsigned();
-
             $table->foreign('response_header_id')
                 ->references('id')->on('response_headers');
 
             $table->integer('header_rule_id')
                 ->unsigned();
-
             $table->foreign('header_rule_id')
                 ->references('id')->on('header_rules');
 
@@ -41,6 +39,6 @@ class CreateHeaderResponseFindingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('header_response_findings');
+        Schema::dropIfExists('response_header_findings');
     }
 }

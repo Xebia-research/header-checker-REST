@@ -18,6 +18,6 @@ class RequestTest extends TestCase
         $request = $endpoint->requests()->create();
 
         $this->get('requests/'.$request->id)
-            ->seeJsonEquals($request->toArray());
+            ->seeJsonStructure($request->getVisible());
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Response extends Model
 {
     /**
-     * Relationship between response headers and a response.
+     * Relationship between response and response headers.
      *
      * @return HasMany
      */
@@ -19,7 +19,7 @@ class Response extends Model
     }
 
     /**
-     * Relationship between reponses and request.
+     * Relationship between responses and request.
      *
      * @return BelongsTo
      */

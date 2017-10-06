@@ -26,6 +26,19 @@ class Request extends Model
     ];
 
     /**
+     * Attributes that should be visible when calling toJson().
+     *
+     * @var array
+     */
+    protected $visible = [
+        'id',
+        'endpoint_id',
+        'error_message',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
      * Relationship between requests and endpoint.
      *
      * @return BelongsTo

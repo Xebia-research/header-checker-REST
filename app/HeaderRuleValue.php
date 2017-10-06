@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class HeaderRuleValue extends Model
 {
     /**
-     * Relationship between HeaderRule and HeaderRuleValue.
+     * Relationship between header rules value and header rule.
      *
-     * @return HasMany
+     * @return BelongsTo
      */
     public function HeaderRule(): BelongsTo
     {
