@@ -63,7 +63,7 @@ class RequestApiController extends Controller
         /* @var Request $request */
         $request = $endpoint->requests()->create();
 
-        $request->requestHeaders()->createMany($webRequest->get('request_headers'));
+        $request->requestHeaders()->createMany($webRequest->get('request_headers', []));
 
         $this->dispatch(new ExecuteRequestJob($request));
 
