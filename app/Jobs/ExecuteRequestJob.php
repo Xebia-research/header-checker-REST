@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Response;
 use GuzzleHttp\Client;
 use App\ResponseHeader;
+use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -42,13 +43,19 @@ class ExecuteRequestJob extends Job
             $this->handleResponse($response);
         };
 
-        $response = $client->request($endpoint->method, $endpoint->url, [
-            'http_errors' => false,
-            'allow_redirects' => [
-                'on_redirect' => $onRedirect,
-            ],
-        ]);
-        $this->handleResponse($response);
+        try {
+            $response = $client->request($endpoint->method, $endpoint->url, [
+                'http_errors' => false,
+                'allow_redirects' => [
+                    'max' => 10,
+                    'on_redirect' => $onRedirect,
+                ],
+            ]);
+            $this->handleResponse($response);
+        } catch (RequestException $e) {
+            $this->request->error_message = $e->getMessage();
+            $this->request->save();
+        }
     }
 
     private function handleResponse(ResponseInterface $guzzleResponse)
