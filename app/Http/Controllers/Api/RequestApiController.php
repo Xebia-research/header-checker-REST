@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
+use App\Endpoint;
+use App\Request;
+use Illuminate\Http\Request as WebRequest;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
@@ -42,23 +44,31 @@ class RequestApiController extends Controller
      * Create a new request for the endpoint.
      * Dispatch ExecuteRequestJob.
      *
-     * @param Request $request
+     * @param WebRequest $webRequest
      * @return Response
      */
-    public function storeRequest(Request $request): Response
+    public function storeRequest(WebRequest $webRequest): Response
     {
-        $this->validate($request, [
+        $this->validate($webRequest, [
             'url' => 'required|url',
             'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
+            'request_headers' => 'array',
+            'request_headers.*.name' => 'required',
+            'request_headers.*.value' => 'required',
         ]);
 
-        $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
-        $endpointRequest = $endpoint->requests()->create();
+        /* @var Endpoint $endpoint */
+        $endpoint = \App\Endpoint::firstOrCreate($webRequest->only('url', 'method'));
 
-        $this->dispatch(new ExecuteRequestJob($endpointRequest));
+        /* @var Request $request */
+        $request = $endpoint->requests()->create();
+
+        $request->requestHeaders()->createMany($webRequest->get('request_headers'));
+
+        $this->dispatch(new ExecuteRequestJob($request));
 
         return response('', 201)->withHeaders([
-            'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
+            'Location' => route('api.requests.show', ['requestId' => $request]),
         ]);
     }
 }

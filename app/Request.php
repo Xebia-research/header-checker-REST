@@ -59,6 +59,16 @@ class Request extends Model
     }
 
     /**
+     * Relationship between request and request headers.
+     *
+     * @return HasMany
+     */
+    public function requestHeaders(): HasMany
+    {
+        return $this->hasMany(RequestHeader::class);
+    }
+
+    /**
      * @return array
      */
     public static function getAllowedMethods(): array
