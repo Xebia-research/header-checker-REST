@@ -50,6 +50,7 @@ class ExecuteRequestJob extends Job
                     'max' => 10,
                     'on_redirect' => $onRedirect,
                 ],
+                'headers' => $this->request->requestHeaders->pluck('value', 'name')->toArray(),
             ]);
             $this->handleResponse($response);
         } catch (RequestException $e) {
