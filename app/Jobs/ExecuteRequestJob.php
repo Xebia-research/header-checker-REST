@@ -31,12 +31,12 @@ class ExecuteRequestJob extends Job
     /**
      * Create RequestHeaderParser instance and set method and url.
      * Get responses from RequestHeaderParser and save them in the database.
+     *
+     * @param Client $client
      */
-    public function handle()
+    public function handle(Client $client)
     {
         $endpoint = $this->request->endpoint;
-
-        $client = new Client();
 
         $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
             $this->handleResponse($response);
