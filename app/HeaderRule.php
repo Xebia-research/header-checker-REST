@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class HeaderRule extends Model
 {
     /**
-     * Relationship between ResponseHeaderFinding and HeaderRule.
+     * Relationship between header rule and response header findings.
      *
      * @return HasMany
      */
-    public function ResponseHeaderFinding(): HasMany
+    public function responseHeaderFindings(): HasMany
     {
-        return $this->HasMany(ResponsHeaderFinding::class);
+        return $this->HasMany(ResponseHeaderFinding::class);
     }
 
     /**
-     * Relationship between ResponseHeaderValue and HeaderRule.
+     * Relationship between header rule and header rule values.
      *
      * @return HasMany
      */
