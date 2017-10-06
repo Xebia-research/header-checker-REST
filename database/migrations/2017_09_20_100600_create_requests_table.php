@@ -20,6 +20,9 @@ class CreateRequestsTable extends Migration
             $table->foreign('endpoint_id')
                 ->references('id')->on('endpoints');
 
+            $table->string('error_message')
+                ->nullable();
+
             $table->timestamps();
         });
     }
