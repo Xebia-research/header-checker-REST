@@ -25,6 +25,14 @@ class Request extends Model
         'PATCH',
     ];
 
+    protected $visible = [
+        'id',
+        'endpoint_id',
+        'error_message',
+        'created_at',
+        'updated_at',
+    ];
+
     /**
      * Relationship between requests and endpoint.
      *
