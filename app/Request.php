@@ -25,6 +25,11 @@ class Request extends Model
         'PATCH',
     ];
 
+    /**
+     * Attributes that should be visible when calling toJson().
+     *
+     * @var array
+     */
     protected $visible = [
         'id',
         'endpoint_id',
