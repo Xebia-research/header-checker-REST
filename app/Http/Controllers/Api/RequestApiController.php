@@ -7,7 +7,6 @@ use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Parsers\RequestHeaderParser;
 
 class RequestApiController extends Controller
 {
@@ -50,7 +49,7 @@ class RequestApiController extends Controller
     {
         $this->validate($request, [
             'url' => 'required|url',
-            'method' => 'required|in:'.RequestHeaderParser::getAllowedMethodsImploded(),
+            'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
         ]);
 
         $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));

@@ -9,6 +9,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Request extends Model
 {
     /**
+     * Allowed methods.
+     *
+     * @var array
+     */
+    private static $allowedMethods = [
+        'GET',
+        'HEAD',
+        'POST',
+        'PUT',
+        'DELETE',
+        'CONNECT',
+        'OPTIONS',
+        'TRACE',
+        'PATCH',
+    ];
+
+    /**
      * Relationship between requests and endpoint.
      *
      * @return BelongsTo
@@ -26,5 +43,13 @@ class Request extends Model
     public function responses(): HasMany
     {
         return $this->hasMany(Response::class);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAllowedMethods(): array
+    {
+        return self::$allowedMethods;
     }
 }
