@@ -5,10 +5,10 @@ namespace App\Jobs;
 use App\Response;
 use GuzzleHttp\Client;
 use App\ResponseHeader;
-use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\RequestException;
 
 class ExecuteRequestJob extends Job
 {
