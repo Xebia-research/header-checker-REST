@@ -16,12 +16,11 @@ class CreateRequestHeadersTable extends Migration
         Schema::create('request_headers', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('request_id')
-                ->unsigned();
+            $table->unsignedInteger('request_id');
             $table->foreign('request_id')
                 ->references('id')->on('requests');
 
-            $table->mediumText('name');
+            $table->string('name');
             $table->mediumText('value');
 
             $table->timestamps();
