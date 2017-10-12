@@ -27,6 +27,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ResponseHeaderFinding extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'score',
+    ];
+
+    /**
      * Relationship between ResponseHeader and ResponseHeaderFinding models.
      *
      * @return BelongsTo

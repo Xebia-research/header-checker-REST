@@ -29,6 +29,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class HeaderRule extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'rule_type',
+        'score',
+    ];
+
+    /**
      * Relationship between ResponseHeaderFinding and HeaderRule models.
      *
      * @return HasMany

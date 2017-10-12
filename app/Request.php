@@ -45,6 +45,15 @@ class Request extends Model
     ];
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'error_message',
+    ];
+
+    /**
      * Attributes that should be visible when calling toJson().
      *
      * @var array

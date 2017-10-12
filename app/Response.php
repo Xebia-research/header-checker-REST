@@ -30,6 +30,16 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class Response extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'status_code',
+        'reason_phrase',
+    ];
+
+    /**
      * Relationship between Request and Response models.
      *
      * @return BelongsTo

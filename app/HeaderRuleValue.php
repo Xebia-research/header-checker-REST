@@ -26,6 +26,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class HeaderRuleValue extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'value_type',
+        'value',
+    ];
+
+    /**
      * Relationship between HeaderRule and HeaderRuleValue models.
      *
      * @return BelongsTo
