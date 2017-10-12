@@ -39,7 +39,11 @@ class ExecuteRequestJob extends Job
         $endpoint = $this->request->endpoint;
 
         $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
-            dispatch(new ParseResponseJob($this->request, $response));
+            dispatch(
+                (new ParseResponseJob($this->request, $response))->chain([
+                    new AnalyzeResponseHeaderJob($this->request->responseHeaders)
+                ])
+            );
         };
 
         try {
@@ -51,7 +55,11 @@ class ExecuteRequestJob extends Job
                 ],
             ]);
 
-            dispatch(new ParseResponseJob($this->request, $response));
+            dispatch(
+                (new ParseResponseJob($this->request, $response))->chain([
+                    new AnalyzeResponseHeaderJob($this->request->responseHeaders)
+                ])
+            );
         } catch (RequestException $e) {
             $this->request->error_message = $e->getMessage();
             $this->request->save();
