@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
- * App\Endpoint
+ * App\Endpoint.
  *
  * @property int $id
  * @property string $method

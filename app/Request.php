@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 /**
- * App\Request
+ * App\Request.
  *
  * @property int $id
  * @property int $endpoint_id

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\HeaderRule
+ * App\HeaderRule.
  *
  * @property int $id
  * @property string $name

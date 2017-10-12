@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Request as EndpointRequest;
 use App\Response;
+use App\Request as EndpointRequest;
 use Psr\Http\Message\ResponseInterface;
 
 class ParseResponseJob extends Job

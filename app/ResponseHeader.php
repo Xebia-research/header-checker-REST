@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\ResponseHeader
+ * App\ResponseHeader.
  *
  * @property int $id
  * @property int $response_id

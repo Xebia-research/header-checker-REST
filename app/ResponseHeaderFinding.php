@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\ResponseHeaderFinding
+ * App\ResponseHeaderFinding.
  *
  * @property int $id
  * @property int $response_header_id

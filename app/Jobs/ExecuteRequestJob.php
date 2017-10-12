@@ -2,12 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Request as EndpointRequest;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\UriInterface;
+use App\Request as EndpointRequest;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use GuzzleHttp\Exception\RequestException;
 
 class ExecuteRequestJob extends Job
 {
@@ -41,7 +41,7 @@ class ExecuteRequestJob extends Job
         $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
             dispatch(
                 (new ParseResponseJob($this->request, $response))->chain([
-                    new AnalyzeResponseHeaderJob($this->request->responseHeaders)
+                    new AnalyzeResponseHeaderJob($this->request->responseHeaders),
                 ])
             );
         };
@@ -57,7 +57,7 @@ class ExecuteRequestJob extends Job
 
             dispatch(
                 (new ParseResponseJob($this->request, $response))->chain([
-                    new AnalyzeResponseHeaderJob($this->request->responseHeaders)
+                    new AnalyzeResponseHeaderJob($this->request->responseHeaders),
                 ])
             );
         } catch (RequestException $e) {
