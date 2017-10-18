@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Endpoint;
 use App\Request;
-use Illuminate\Http\Request as WebRequest;
+use App\Endpoint;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request as WebRequest;
 
 class RequestApiController extends Controller
 {
