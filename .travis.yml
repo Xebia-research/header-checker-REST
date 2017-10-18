@@ -16,4 +16,5 @@ before_script:
 
 script:
   - composer validate --strict
+  - vendor/bin/security-checker security:check
   - vendor/bin/phpunit --coverage-text

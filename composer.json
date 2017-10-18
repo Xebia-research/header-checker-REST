@@ -15,7 +15,8 @@
         "phpunit/phpunit": "~6.0",
         "mockery/mockery": "~0.9",
         "barryvdh/laravel-ide-helper": "^2.4",
-        "doctrine/dbal": "~2.3"
+        "doctrine/dbal": "~2.3",
+        "sensiolabs/security-checker": "^4.1"
     },
     "autoload": {
         "psr-4": {
