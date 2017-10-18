@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHeaderRuleValueTable extends Migration
+class CreateHeaderRuleValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateHeaderRuleValueTable extends Migration
      */
     public function up()
     {
-        Schema::create('header_rule_value', function (Blueprint $table) {
+        Schema::create('header_rule_values', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('header_rule_id')
-                ->unsigned();
-
+            $table->unsignedInteger('header_rule_id');
             $table->foreign('header_rule_id')
                 ->references('id')->on('header_rules');
 
-            $table->enum('value_type', ['equals', 'equals_regex']);
+            $table->enum('value_type', [
+                'equals',
+                'equals_regex',
+            ]);
             $table->string('value');
 
             $table->timestamps();
@@ -36,6 +37,6 @@ class CreateHeaderRuleValueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('header_rule_value');
+        Schema::dropIfExists('header_rule_values');
     }
 }

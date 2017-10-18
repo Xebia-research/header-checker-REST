@@ -16,8 +16,7 @@ class CreateResponsesTable extends Migration
         Schema::create('responses', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('request_id')
-                ->unsigned();
+            $table->unsignedInteger('request_id');
             $table->foreign('request_id')
                 ->references('id')->on('requests');
 

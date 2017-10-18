@@ -16,13 +16,11 @@ class CreateResponseHeaderFindingsTable extends Migration
         Schema::create('response_header_findings', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('response_header_id')
-                ->unsigned();
+            $table->unsignedInteger('response_header_id');
             $table->foreign('response_header_id')
                 ->references('id')->on('response_headers');
 
-            $table->integer('header_rule_id')
-                ->unsigned();
+            $table->unsignedInteger('header_rule_id');
             $table->foreign('header_rule_id')
                 ->references('id')->on('header_rules');
 

@@ -2,10 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Response;
 use GuzzleHttp\Client;
-use App\ResponseHeader;
 use Psr\Http\Message\UriInterface;
+use App\Request as EndpointRequest;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -15,16 +14,16 @@ class ExecuteRequestJob extends Job
     /**
      * The request that should be executed.
      *
-     * @var \App\Request
+     * @var EndpointRequest
      */
     private $request;
 
     /**
      * ExecuteRequestJob constructor.
      *
-     * @param \App\Request $request
+     * @param EndpointRequest $request
      */
-    public function __construct(\App\Request $request)
+    public function __construct(EndpointRequest $request)
     {
         $this->request = $request;
     }
@@ -40,7 +39,11 @@ class ExecuteRequestJob extends Job
         $endpoint = $this->request->endpoint;
 
         $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
-            $this->handleResponse($response);
+            dispatch(
+                (new ParseResponseJob($this->request, $response))->chain([
+                    new AnalyzeResponseHeaderJob($this->request->responseHeaders),
+                ])
+            );
         };
 
         try {
@@ -51,37 +54,15 @@ class ExecuteRequestJob extends Job
                     'on_redirect' => $onRedirect,
                 ],
             ]);
-            $this->handleResponse($response);
+
+            dispatch(
+                (new ParseResponseJob($this->request, $response))->chain([
+                    new AnalyzeResponseHeaderJob($this->request->responseHeaders),
+                ])
+            );
         } catch (RequestException $e) {
             $this->request->error_message = $e->getMessage();
             $this->request->save();
-        }
-    }
-
-    private function handleResponse(ResponseInterface $guzzleResponse)
-    {
-        $response = new Response;
-        $response->status_code = $guzzleResponse->getStatusCode();
-        $response->reason_phrase = $guzzleResponse->getReasonPhrase();
-
-        $this->request->responses()->save($response);
-
-        foreach ($guzzleResponse->getHeaders() as $key=>$value) {
-            if (is_array($value)) {
-                foreach ($value as $valueString) {
-                    $responseHeader = new ResponseHeader;
-                    $responseHeader->name = $key;
-                    $responseHeader->value = $valueString;
-
-                    $response->responseHeaders()->save($responseHeader);
-                }
-            } else {
-                $responseHeader = new ResponseHeader;
-                $responseHeader->name = $key;
-                $responseHeader->value = $value;
-
-                $response->responseHeaders()->save($responseHeader);
-            }
         }
     }
 }

@@ -16,8 +16,7 @@ class CreateResponseHeadersTable extends Migration
         Schema::create('response_headers', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('response_id')
-                ->unsigned();
+            $table->unsignedInteger('response_id');
             $table->foreign('response_id')
                 ->references('id')->on('responses');
 
