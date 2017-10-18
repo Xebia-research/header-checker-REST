@@ -72,6 +72,57 @@ class StoreRequestTest extends TestCase
         ])->assertResponseStatus(422);
     }
 
+    public function testShouldRespondUnprocessableEntityWhenRequestHeadersIsEmptyIsInvalid()
+    {
+        $this->post('requests', [
+            'url' => 'https://www.google.com/',
+            'method' => 'GET',
+            'request_headers' => 'loremipsum',
+        ])->assertResponseStatus(422);
+    }
+
+    public function testShouldRespondUnprocessableEntityWhenRequestHeaderNameIsEmpty()
+    {
+        $this->post('requests', [
+            'url' => 'https://www.google.com/',
+            'method' => 'GET',
+            'request_headers' => [
+                [
+                    'name' => '',
+                    'value' => 'Basic dXNlcm5hbWU6cGFzc3dvcmQ=',
+                ],
+            ],
+        ])->assertResponseStatus(422);
+    }
+
+    public function testShouldRespondUnprocessableEntityWhenRequestHeaderValueIsEmpty()
+    {
+        $this->post('requests', [
+            'url' => 'https://www.google.com/',
+            'method' => 'GET',
+            'request_headers' => [
+                [
+                    'name' => 'Authorization',
+                    'value' => '',
+                ],
+            ],
+        ])->assertResponseStatus(422);
+    }
+
+    public function testShouldRespondOkWhenUrlMethodAndRequestHeaderAreValid()
+    {
+        $this->post('requests', [
+            'url' => 'https://www.google.com/',
+            'method' => 'GET',
+            'request_headers' => [
+                [
+                    'name' => 'Authorization',
+                    'value' => 'Basic dXNlcm5hbWU6cGFzc3dvcmQ=',
+                ],
+            ],
+        ])->assertResponseStatus(201);
+    }
+
     public function testShouldRespondOkWhenUrlAndMethodAreValid()
     {
         foreach (\App\Request::getAllowedMethods() as $method) {
