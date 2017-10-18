@@ -16,7 +16,7 @@ class CreateEndpointsTable extends Migration
         Schema::create('endpoints', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('method', 7);
+            $table->enum('method', \App\Request::getAllowedMethods());
             $table->string('url');
 
             $table->timestamps();

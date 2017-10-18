@@ -30,5 +30,3 @@ $router->group(['namespace' => 'Api'], function () use ($router) {
         'uses' => 'RequestApiController@storeRequest',
     ]);
 });
-
-$router->get('/check/{url}', 'Api\RequestApiController@check');
