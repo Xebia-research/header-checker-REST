@@ -2,10 +2,14 @@
 
 namespace App;
 
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
-class Application extends Model
+class Application extends Model implements AuthenticatableContract
 {
+    use Authenticatable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -14,6 +18,6 @@ class Application extends Model
     protected $fillable = [
         'name',
         'description',
-        'api_key'
+        'api_key',
     ];
 }

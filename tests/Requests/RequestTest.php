@@ -1,13 +1,13 @@
 <?php
 
-
-class RequestTest extends TestCase
+class RequestTest extends ApiTestCase
 {
     public function testIndexAllRequests()
     {
         $requests = \App\Request::all();
 
-        $this->get('requests')
+        $this->actingAs($this->application)
+            ->get('requests')
             ->seeJsonEquals($requests->toArray());
     }
 
@@ -17,7 +17,8 @@ class RequestTest extends TestCase
         $endpoint = \App\Endpoint::create();
         $request = $endpoint->requests()->create();
 
-        $this->get('requests/'.$request->id)
+        $this->actingAs($this->application)
+            ->get('requests/'.$request->id)
             ->seeJsonStructure($request->getVisible());
     }
 }
