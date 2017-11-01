@@ -20,7 +20,7 @@ class StaticSiteProfile extends ApplicationProfile
      *
      * @return string
      */
-    public function getProfileIdentifierName(): string
+    public static function getProfileIdentifierName(): string
     {
         return 'Static Website';
     }
@@ -30,7 +30,7 @@ class StaticSiteProfile extends ApplicationProfile
      *
      * @return string
      */
-    public function getProfileIdentifier(): string
+    public static function getProfileIdentifier(): string
     {
         return 'static_site';
     }

@@ -20,7 +20,7 @@ class ApiProfile extends ApplicationProfile
      *
      * @return string
      */
-    public function getProfileIdentifierName(): string
+    public static function getProfileIdentifierName(): string
     {
         return 'API';
     }
@@ -30,7 +30,7 @@ class ApiProfile extends ApplicationProfile
      *
      * @return string
      */
-    public function getProfileIdentifier(): string
+    public static function getProfileIdentifier(): string
     {
         return 'api';
     }
