@@ -11,7 +11,7 @@
 |
 */
 
-$router->group(['namespace' => 'Api'], function () use ($router) {
+$router->group(['middleware' => 'auth', 'namespace' => 'Api'], function () use ($router) {
     $router->get('/', [
         'as' => 'api.welcome',
         'uses' => 'DefaultApiController@showWelcomeMessage',

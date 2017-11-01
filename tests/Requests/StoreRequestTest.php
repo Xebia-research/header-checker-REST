@@ -1,23 +1,24 @@
 <?php
 
-class StoreRequestTest extends TestCase
+class StoreRequestTest extends ApiTestCase
 {
     public function testShouldRespondUnprocessableEntityWhenUrlAndMethodAreNotPresent()
     {
-        $response = $this->post('requests');
+        $response = $this->actingAs($this->application)->post('requests');
         $response->assertResponseStatus(422);
     }
 
     public function testShouldRespondUnprocessableEntityWhenUrlIsNotPresent()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)
+            ->post('requests', [
             'method' => \App\Request::getAllowedMethods()[0],
         ])->assertResponseStatus(422);
     }
 
     public function testShouldRespondUnprocessableEntityWhenMethodIsNotPresent()
     {
-        $response = $this->post('requests', [
+        $response = $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
         ]);
         $response->assertResponseStatus(422);
@@ -25,7 +26,7 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenUrlAndMethodAreEmpty()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => '',
             'method' => '',
         ])->assertResponseStatus(422);
@@ -33,7 +34,7 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenUrlAndMethodIsEmpty()
     {
-        $response = $this->post('requests', [
+        $response = $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => '',
         ]);
@@ -42,7 +43,7 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenUrlIsEmpty()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => '',
             'method' => \App\Request::getAllowedMethods()[0],
         ])->assertResponseStatus(422);
@@ -50,7 +51,7 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenMethodIsEmpty()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => '',
         ])->assertResponseStatus(422);
@@ -58,7 +59,7 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenUrlIsInvalid()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'httpa://www.google.com2/',
             'method' => \App\Request::getAllowedMethods()[0],
         ])->assertResponseStatus(422);
@@ -66,7 +67,7 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondUnprocessableEntityWhenMethodIsInvalid()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GOT',
         ])->assertResponseStatus(422);
@@ -75,7 +76,7 @@ class StoreRequestTest extends TestCase
     public function testShouldRespondOkWhenUrlAndMethodAreValid()
     {
         foreach (\App\Request::getAllowedMethods() as $method) {
-            $this->post('requests', [
+            $this->actingAs($this->application)->post('requests', [
                 'url' => 'https://www.google.com/',
                 'method' => $method,
             ])->assertResponseStatus(201);
@@ -89,7 +90,7 @@ class StoreRequestTest extends TestCase
             'method' => 'GET',
         ];
 
-        $this->post('requests', $parameters);
+        $this->actingAs($this->application)->post('requests', $parameters);
         $this->seeInDatabase('endpoints', $parameters);
     }
 
@@ -97,7 +98,7 @@ class StoreRequestTest extends TestCase
     {
         $this->expectsJobs(\App\Jobs\ExecuteRequestJob::class);
 
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GET',
         ])->assertResponseStatus(201);
@@ -105,7 +106,7 @@ class StoreRequestTest extends TestCase
 
     public function testShouldRespondWithLocation()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GET',
         ])->seeHeader('Location');
