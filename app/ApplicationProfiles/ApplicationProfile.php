@@ -3,6 +3,7 @@
 namespace App\ApplicationProfiles;
 
 use App\ApplicationProfiles\Contracts\Profile;
+use Illuminate\Support\Collection;
 
 abstract class ApplicationProfile implements Profile
 {
@@ -14,10 +15,10 @@ abstract class ApplicationProfile implements Profile
     protected $headerRules = [];
 
     /**
-     * @return array
+     * @return Collection
      */
-    public function getHeaderRules(): array
+    public function getHeaderRules(): Collection
     {
-        return $this->headerRules;
+        return collect($this->headerRules);
     }
 }
