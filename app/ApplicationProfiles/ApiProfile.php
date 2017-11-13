@@ -2,6 +2,8 @@
 
 namespace App\ApplicationProfiles;
 
+use App\HeaderRules\HeaderRule;
+
 class ApiProfile extends ApplicationProfile
 {
     /**
@@ -9,7 +11,7 @@ class ApiProfile extends ApplicationProfile
      *
      * These header rules are check against any response header retrieved with this application profile.
      *
-     * @var array
+     * @var HeaderRule[]
      */
     protected $headerRules = [
         //

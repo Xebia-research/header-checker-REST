@@ -1,10 +1,10 @@
 <?php
 
-namespace App\ApplicationProfiles;
+namespace DummyNamespace;
 
 use App\HeaderRules\HeaderRule;
 
-class WebAppProfile extends ApplicationProfile
+class DummyClass extends ApplicationProfile
 {
     /**
      * The application profile's header rule stack.
@@ -14,10 +14,7 @@ class WebAppProfile extends ApplicationProfile
      * @var HeaderRule[]
      */
     protected $headerRules = [
-        \App\HeaderRules\Security\FrameOptions::class,
-        \App\HeaderRules\Security\XssProtection::class,
-        \App\HeaderRules\Security\ContentTypeOptions::class,
-        \App\HeaderRules\Security\PermittedCrossDomainPolicies::class,
+        //
     ];
 
     /**
@@ -27,7 +24,7 @@ class WebAppProfile extends ApplicationProfile
      */
     public static function getProfileIdentifierName(): string
     {
-        return 'Web Application';
+        return 'Dummy Identifier Name';
     }
 
     /**
@@ -37,6 +34,6 @@ class WebAppProfile extends ApplicationProfile
      */
     public static function getProfileIdentifier(): string
     {
-        return 'web_app';
+        return 'dummy_identifier';
     }
 }
