@@ -21,6 +21,11 @@ $router->group(['middleware' => 'auth', 'namespace' => 'Api'], function () use (
         'as' => 'api.requests.index',
         'uses' => 'RequestApiController@indexAllRequests',
     ]);
+    $router->get('requests/{requestId:[0-9]+}/{format:[A-Za-z]+}', [
+        'as' => 'api.requests.show',
+        'uses' => 'RequestApiController@showSingleRequest',
+    ]);
+    //TODO: make format parameter optional
     $router->get('requests/{requestId:[0-9]+}', [
         'as' => 'api.requests.show',
         'uses' => 'RequestApiController@showSingleRequest',

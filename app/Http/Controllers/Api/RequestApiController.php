@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Spatie\ArrayToXml\ArrayToXml;
 
 class RequestApiController extends Controller
 {
@@ -27,13 +28,27 @@ class RequestApiController extends Controller
      * Throwed 404 when request is not found.
      *
      * @param int $requestId
-     * @return JsonResponse
+     * @param string $format
+     * @return Response
      */
-    public function showSingleRequest(int $requestId): JsonResponse
+    public function showSingleRequest(int $requestId, string $format=null)
     {
         $request = \App\Request::findOrFail($requestId);
 
-        return response()->json($request);
+        if($format == 'xml' || $format == 'XML'){
+            $xmlResponse = ArrayToXml::convert($request->toArray());
+
+            return response($xmlResponse);
+        }else if($format == 'json' || 'JSON'){
+            $jsonResponse = response()->json($request);
+
+            return $jsonResponse;
+        }else {
+            //TODO return HTML reponse
+            $jsonResponse = response()->json($request);
+
+            return $jsonResponse;
+        }
     }
 
     /**
