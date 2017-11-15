@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\ApplicationProfiles\ApplicationProfileFactory;
 use Illuminate\Database\Eloquent\Collection;
+use App\ApplicationProfiles\ApplicationProfileFactory;
 
 class AnalyzeResponseHeaderJob extends Job
 {
@@ -24,7 +24,7 @@ class AnalyzeResponseHeaderJob extends Job
     public function __construct(string $profileIdentifier, Collection $responseHeaders)
     {
         $this->applicationProfile = ApplicationProfileFactory::build($profileIdentifier);
-        $this->responseHeaders    = $responseHeaders;
+        $this->responseHeaders = $responseHeaders;
     }
 
     public function handle()

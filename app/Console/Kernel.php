@@ -2,9 +2,9 @@
 
 namespace App\Console;
 
-use App\Console\Commands\ApplicationProfileMakeCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\ApplicationProfileMakeCommand;
 
 class Kernel extends ConsoleKernel
 {

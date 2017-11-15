@@ -2,9 +2,9 @@
 
 namespace App\ApplicationProfiles;
 
-use App\ApplicationProfiles\Contracts\Profile;
 use App\HeaderRules\HeaderRule;
 use Illuminate\Support\Collection;
+use App\ApplicationProfiles\Contracts\Profile;
 
 abstract class ApplicationProfile implements Profile
 {
