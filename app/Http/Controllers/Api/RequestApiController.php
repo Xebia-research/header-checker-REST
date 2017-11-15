@@ -50,10 +50,14 @@ class RequestApiController extends Controller
         $this->validate($request, [
             'url' => 'required|url',
             'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
+            'profile' => 'filled|alpha_dash',
         ]);
 
         $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
-        $endpointRequest = $endpoint->requests()->create();
+
+        $endpointRequest = $endpoint->requests()->create([
+            'application_profile' => $request->input('profile'),
+        ]);
 
         $this->dispatch(new ExecuteRequestJob($endpointRequest));
 
