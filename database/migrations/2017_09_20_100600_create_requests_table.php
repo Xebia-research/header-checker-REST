@@ -20,8 +20,6 @@ class CreateRequestsTable extends Migration
             $table->foreign('endpoint_id')
                 ->references('id')->on('endpoints');
 
-            $table->string('application_profile')
-                ->nullable();
             $table->string('error_message')
                 ->nullable();
 
