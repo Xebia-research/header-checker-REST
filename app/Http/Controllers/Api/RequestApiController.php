@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Request;
 use App\Endpoint;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request as WebRequest;
+use Illuminate\Http\Request;
 
 class RequestApiController extends Controller
 {
@@ -44,31 +43,31 @@ class RequestApiController extends Controller
      * Create a new request for the endpoint.
      * Dispatch ExecuteRequestJob.
      *
-     * @param WebRequest $webRequest
+     * @param Request $request
      * @return Response
      */
-    public function storeRequest(WebRequest $webRequest): Response
+    public function storeRequest(Request $request): Response
     {
-        $this->validate($webRequest, [
+        $this->validate($request, [
             'url' => 'required|url',
             'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
             'request_headers' => 'array',
-            'request_headers.*.name' => 'required',
-            'request_headers.*.value' => 'required',
+            'request_headers.*.name' => 'required|string|max:255',
+            'request_headers.*.value' => 'required|string|max:16777215',
         ]);
 
         /* @var Endpoint $endpoint */
-        $endpoint = \App\Endpoint::firstOrCreate($webRequest->only('url', 'method'));
+        $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
 
-        /* @var Request $request */
-        $request = $endpoint->requests()->create();
+        /* @var \App\Request $request */
+        $endpointRequest = $endpoint->requests()->create();
 
-        $request->requestHeaders()->createMany($webRequest->get('request_headers', []));
+        $endpointRequest->requestHeaders()->createMany($request->get('request_headers', []));
 
-        $this->dispatch(new ExecuteRequestJob($request));
+        $this->dispatch(new ExecuteRequestJob($endpointRequest));
 
         return response('', 201)->withHeaders([
-            'Location' => route('api.requests.show', ['requestId' => $request]),
+            'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
         ]);
     }
 }
