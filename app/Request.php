@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  *
  * @property int $id
  * @property int $endpoint_id
+ * @property string|null application_profile
  * @property string|null $error_message
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
@@ -50,6 +51,7 @@ class Request extends Model
      * @var array
      */
     protected $fillable = [
+        'application_profile',
         'error_message',
     ];
 
@@ -61,6 +63,7 @@ class Request extends Model
     protected $visible = [
         'id',
         'endpoint_id',
+        'application_profile',
         'error_message',
         'created_at',
         'updated_at',

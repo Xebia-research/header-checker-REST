@@ -54,13 +54,16 @@ class RequestApiController extends Controller
             'request_headers' => 'array',
             'request_headers.*.name' => 'required|string|max:255',
             'request_headers.*.value' => 'required|string|max:16777215',
+            'profile' => 'filled|alpha_dash',
         ]);
 
         /* @var Endpoint $endpoint */
         $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
 
-        /* @var \App\Request $request */
-        $endpointRequest = $endpoint->requests()->create();
+        /* @var \App\Request $endpointRequest */
+        $endpointRequest = $endpoint->requests()->create([
+            'application_profile' => $request->input('profile'),
+        ]);
 
         $endpointRequest->requestHeaders()->createMany($request->get('request_headers', []));
 
