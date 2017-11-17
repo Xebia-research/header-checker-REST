@@ -90,6 +90,16 @@ class Request extends Model
     }
 
     /**
+     * Relationship between RequestHeader and Request models.
+     *
+     * @return HasMany
+     */
+    public function requestHeaders(): HasMany
+    {
+        return $this->hasMany(RequestHeader::class);
+    }
+
+    /**
      * Relationship between ResponseHeader and Request models, through Response model.
      *
      * @return HasManyThrough
