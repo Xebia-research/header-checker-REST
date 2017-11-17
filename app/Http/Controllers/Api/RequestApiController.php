@@ -7,10 +7,16 @@ use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Collection;
 use Spatie\ArrayToXml\ArrayToXml;
 
 class RequestApiController extends Controller
 {
+
+    private const FORMAT_XML = "xml";
+    private const FORMAT_JSON = "json";
+    private const FORMAT_HTML = "html";
+
     /**
      * Find all requests in the database.
      *
@@ -31,24 +37,33 @@ class RequestApiController extends Controller
      * @param string $format
      * @return Response
      */
-    public function showSingleRequest(int $requestId, string $format=null)
+    public function showSingleRequest(int $requestId, string $format = null)
     {
         $request = \App\Request::findOrFail($requestId);
+        return $this->showOutput($request, $format);
+    }
 
-        if($format == 'xml' || $format == 'XML'){
-            $xmlResponse = ArrayToXml::convert($request->toArray());
+    /**
+     * Method to convert collection into desired format
+     * @param Collection $collection
+     * @param string $format
+     * @return Response
+     */
+    public function showOutput($resource, string $format = null)
+    {
+        $format = strtolower($format);
 
-            return response($xmlResponse);
-        }else if($format == 'json' || 'JSON'){
-            $jsonResponse = response()->json($request);
-
-            return $jsonResponse;
-        }else {
-            //TODO return HTML reponse
-            $jsonResponse = response()->json($request);
-
-            return $jsonResponse;
-        }
+        switch ($format){
+            case static::FORMAT_JSON:
+                return response()->json($resource);
+            case static::FORMAT_XML:
+                return ArrayToXml::convert($resource->toArray());
+            case static::FORMAT_HTML:
+                //TODO: return HTML response
+                return view('html_response', ['resource' => $resource]);
+            default:
+                return response()->json($resource);
+            }
     }
 
     /**
@@ -64,7 +79,7 @@ class RequestApiController extends Controller
     {
         $this->validate($request, [
             'url' => 'required|url',
-            'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
+            'method' => 'required|in:' . implode(',', \App\Request::getAllowedMethods()),
         ]);
 
         $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
