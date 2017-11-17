@@ -15,9 +15,13 @@ class CreateApplicationsTable extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->increments('id');
+
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('api_key', 32)->unique();
+            $table->text('description')
+                ->nullable();
+            $table->string('api_key', 32)
+                ->unique();
+
             $table->timestamps();
         });
     }
