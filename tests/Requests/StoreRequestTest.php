@@ -75,7 +75,7 @@ class StoreRequestTest extends ApiTestCase
 
     public function testShouldRespondUnprocessableEntityWhenRequestHeadersIsEmptyIsInvalid()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GET',
             'request_headers' => 'loremipsum',
@@ -84,7 +84,7 @@ class StoreRequestTest extends ApiTestCase
 
     public function testShouldRespondUnprocessableEntityWhenRequestHeaderNameIsEmpty()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GET',
             'request_headers' => [
@@ -98,7 +98,7 @@ class StoreRequestTest extends ApiTestCase
 
     public function testShouldRespondUnprocessableEntityWhenRequestHeaderValueIsEmpty()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GET',
             'request_headers' => [
@@ -112,7 +112,7 @@ class StoreRequestTest extends ApiTestCase
 
     public function testShouldRespondOkWhenUrlMethodAndRequestHeaderAreValid()
     {
-        $this->post('requests', [
+        $this->actingAs($this->application)->post('requests', [
             'url' => 'https://www.google.com/',
             'method' => 'GET',
             'request_headers' => [
