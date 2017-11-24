@@ -16,14 +16,17 @@ class RequestTest extends ApiTestCase
 
     public function testShowSingleRequest()
     {
-        /* @var Endpoint $endpoint */
-        $endpoint = Endpoint::create();
-        $endpointRequest = $endpoint->requests()->create([
+        /* @var \App\Endpoint $endpoint */
+        $endpoint = Endpoint::create([
+            'url' => 'https://www.google.com/',
+            'method' => EndpointRequest::getAllowedMethods()[0],
+        ]);
+        $request = $endpoint->requests()->create([
             'profile_id' => $this->profile->id,
         ]);
 
         $this->actingAs($this->application)
-            ->get('requests/'.$endpointRequest->id)
-            ->seeJsonStructure($endpointRequest->getVisible());
+            ->get('requests/'.$request->id)
+            ->seeJsonStructure($request->getVisible());
     }
 }

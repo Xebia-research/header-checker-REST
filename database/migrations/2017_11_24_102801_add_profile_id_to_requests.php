@@ -14,7 +14,8 @@ class AddProfileIdToRequests extends Migration
     public function up()
     {
         Schema::table('requests', function (Blueprint $table) {
-            $table->unsignedInteger('profile_id');
+            $table->unsignedInteger('profile_id')
+                ->default(0); // Fix sqllite migration
             $table->foreign('profile_id')
                 ->references('id')->on('profiles');
         });
