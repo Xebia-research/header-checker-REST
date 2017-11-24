@@ -38,12 +38,10 @@ class ExecuteRequestJob extends Job
     {
         $endpoint = $this->request->endpoint;
 
-        $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
-            dispatch(
-                (new ParseResponseJob($this->request, $response))->chain([
-                    new AnalyzeResponseHeaderJob($this->request->responseHeaders),
-                ])
-            );
+        $application_profile = $this->request->application_profile ?? 'api'; // TODO: Default application profiles?
+
+        $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) use ($application_profile) {
+            dispatch(new ParseResponseJob($this->request, $response));
         };
 
         try {
@@ -53,13 +51,10 @@ class ExecuteRequestJob extends Job
                     'max' => 10,
                     'on_redirect' => $onRedirect,
                 ],
+                'headers' => $this->request->requestHeaders->pluck('value', 'name')->toArray(),
             ]);
 
-            dispatch(
-                (new ParseResponseJob($this->request, $response))->chain([
-                    new AnalyzeResponseHeaderJob($this->request->responseHeaders),
-                ])
-            );
+            dispatch(new ParseResponseJob($this->request, $response));
         } catch (RequestException $e) {
             $this->request->error_message = $e->getMessage();
             $this->request->save();

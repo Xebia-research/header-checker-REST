@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Endpoint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
@@ -94,10 +95,18 @@ class RequestApiController extends Controller
         $this->validate($request, [
             'url' => 'required|url',
             'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
+            'request_headers' => 'array',
+            'request_headers.*.name' => 'required|string|max:255',
+            'request_headers.*.value' => 'required|string|max:16777215',
         ]);
 
+        /* @var Endpoint $endpoint */
         $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
+
+        /* @var \App\Request $endpointRequest */
         $endpointRequest = $endpoint->requests()->create();
+
+        $endpointRequest->requestHeaders()->createMany($request->get('request_headers', []));
 
         $this->dispatch(new ExecuteRequestJob($endpointRequest));
 

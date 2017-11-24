@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ResponseHeader extends Model
+class RequestHeader extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -18,12 +18,12 @@ class ResponseHeader extends Model
     ];
 
     /**
-     * Relationship between Response and ResponseHeader models.
+     * Relationship between request headers and request.
      *
      * @return BelongsTo
      */
-    public function response(): BelongsTo
+    public function request(): BelongsTo
     {
-        return $this->belongsTo(Response::class);
+        return $this->belongsTo(Request::class);
     }
 }

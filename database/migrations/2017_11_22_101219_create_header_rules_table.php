@@ -17,12 +17,23 @@ class CreateHeaderRulesTable extends Migration
             $table->increments('id');
 
             $table->string('name');
-            $table->text('description');
-            $table->enum('rule_type', [
+
+            $table->enum('validation_type', [
                 'include',
                 'exclude',
-            ])->nullable();
-            $table->unsignedTinyInteger('score');
+                'value',
+                'regex',
+            ]);
+
+            $table->mediumText('validation_value')
+                ->nullable();
+
+            $table->enum('risk_level', [
+                'low',
+                'moderate',
+                'high',
+                'critical',
+            ]);
 
             $table->timestamps();
         });

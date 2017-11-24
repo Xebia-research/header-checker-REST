@@ -7,24 +7,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-/**
- * App\Request.
- *
- * @property int $id
- * @property int $endpoint_id
- * @property string|null $error_message
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property-read \App\Endpoint $endpoint
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\ResponseHeader[] $responseHeaders
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Response[] $responses
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Request whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Request whereEndpointId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Request whereErrorMessage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Request whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Request whereUpdatedAt($value)
- * @mixin \Eloquent
- */
 class Request extends Model
 {
     /**
@@ -84,6 +66,16 @@ class Request extends Model
     public function responses(): HasMany
     {
         return $this->hasMany(Response::class);
+    }
+
+    /**
+     * Relationship between RequestHeader and Request models.
+     *
+     * @return HasMany
+     */
+    public function requestHeaders(): HasMany
+    {
+        return $this->hasMany(RequestHeader::class);
     }
 
     /**
