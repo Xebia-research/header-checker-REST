@@ -15,7 +15,7 @@ class CreateHeaderRulesTable extends Migration
     {
         Schema::create('header_rules', function (Blueprint $table) {
             $table->increments('id');
-            
+
             $table->string('name');
 
             $table->enum('validation_type', [
@@ -24,7 +24,7 @@ class CreateHeaderRulesTable extends Migration
                 'value',
                 'regex',
             ]);
-            
+
             $table->mediumText('validation_value')
                 ->nullable();
 
