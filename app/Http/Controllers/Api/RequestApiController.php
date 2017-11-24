@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Endpoint;
+use App\Profile;
+use App\Request as EndpointRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
@@ -49,25 +51,60 @@ class RequestApiController extends Controller
     public function storeRequest(Request $request): Response
     {
         $this->validate($request, [
-            'url' => 'required|url',
-            'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
+            'url' => [
+                'required',
+                'url',
+            ],
+            'method' => [
+                'required',
+                'in:' . implode(',', \App\Request::getAllowedMethods()),
+            ],
+            'profile' => [
+                'required',
+                'exists:profiles,identifier',
+            ],
             'request_headers' => 'array',
-            'request_headers.*.name' => 'required|string|max:255',
-            'request_headers.*.value' => 'required|string|max:16777215',
+            'request_headers.*.name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'request_headers.*.value' => [
+                'required',
+                'string',
+                'max:16777215'
+            ],
         ]);
 
         /* @var Endpoint $endpoint */
-        $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
-
-        /* @var \App\Request $endpointRequest */
-        $endpointRequest = $endpoint->requests()->create();
-
-        $endpointRequest->requestHeaders()->createMany($request->get('request_headers', []));
+        $endpoint = Endpoint::firstOrCreate($request->only('url', 'method'));
+        $endpointRequest = $this->createEndpointRequest($request, $endpoint);
 
         $this->dispatch(new ExecuteRequestJob($endpointRequest));
 
         return response('', 201)->withHeaders([
             'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
         ]);
+    }
+
+    /**
+     * Create EndpointRequest for Request and Endpoint.
+     *
+     * @param Request $request
+     * @param Endpoint $endpoint
+     * @return EndpointRequest
+     */
+    private function createEndpointRequest(Request $request, Endpoint $endpoint): EndpointRequest
+    {
+        $profile = Profile::whereIdentifier($request->get('profile'))
+            ->first();
+
+        /* @var \App\Request $endpointRequest */
+        $endpointRequest = $endpoint->requests()->create([
+            'profile_id' => $profile->id,
+        ]);
+        $endpointRequest->requestHeaders()->createMany($request->get('request_headers', []));
+
+        return $endpointRequest;
     }
 }

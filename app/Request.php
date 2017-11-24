@@ -32,6 +32,7 @@ class Request extends Model
      * @var array
      */
     protected $fillable = [
+        'profile_id',
         'error_message',
     ];
 
