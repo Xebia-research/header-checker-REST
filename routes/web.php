@@ -17,19 +17,16 @@ $router->group(['middleware' => 'auth', 'namespace' => 'Api'], function () use (
         'uses' => 'DefaultApiController@showWelcomeMessage',
     ]);
 
-    $router->get('requests', [
+    $router->get('requests[/{format}]', [
         'as' => 'api.requests.index',
         'uses' => 'RequestApiController@indexAllRequests',
     ]);
-    $router->get('requests/{requestId:[0-9]+}/{format:[A-Za-z]+}', [
+
+    $router->get('requests/{requestId:[0-9]+}[/{format}]', [
         'as' => 'api.requests.show',
         'uses' => 'RequestApiController@showSingleRequest',
     ]);
-    //TODO: make format parameter optional
-    $router->get('requests/{requestId:[0-9]+}', [
-        'as' => 'api.requests.show',
-        'uses' => 'RequestApiController@showSingleRequest',
-    ]);
+
     $router->post('requests', [
         'as' => 'api.requests.store',
         'uses' => 'RequestApiController@storeRequest',

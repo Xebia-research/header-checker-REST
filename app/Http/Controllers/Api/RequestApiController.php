@@ -22,11 +22,11 @@ class RequestApiController extends Controller
      *
      * @return JsonResponse
      */
-    public function indexAllRequests(): JsonResponse
+    public function indexAllRequests(string $format = null)
     {
         $requests = \App\Request::all();
-
-        return response()->json($requests);
+        $response = $this->showOutput($requests, $format);
+        return $response;
     }
 
     /**
@@ -45,25 +45,38 @@ class RequestApiController extends Controller
 
     /**
      * Method to convert collection into desired format
-     * @param Collection $collection
+     * @param Collection $resource
      * @param string $format
      * @return Response
      */
     public function showOutput($resource, string $format = null)
     {
         $format = strtolower($format);
+        $array = [];
+        $isCollection = false;
+        $requestName = "request";
 
-        switch ($format){
+        if ($resource instanceof \Illuminate\Database\Eloquent\Collection) {
+            $array = [
+                'request' => $resource->toArray()
+            ];
+            $isCollection = true;
+            $requestName = "collection";
+        } else {
+            // Single model
+            $array = $resource->toArray();
+        }
+
+        switch ($format) {
             case static::FORMAT_JSON:
-                return response()->json($resource);
+                return response()->json($array);
             case static::FORMAT_XML:
-                return ArrayToXml::convert($resource->toArray());
+                return ArrayToXml::convert($array, $requestName);
             case static::FORMAT_HTML:
-                //TODO: return HTML response
-                return view('html_response', ['resource' => $resource]);
+                    return view('html_request', ['resource' => $array, 'isCollection' => $isCollection]);
             default:
-                return response()->json($resource);
-            }
+                return response()->json($array);
+        }
     }
 
     /**
