@@ -6,16 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Collection;
 use Spatie\ArrayToXml\ArrayToXml;
+use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 
 class RequestApiController extends Controller
 {
-
-    private const FORMAT_XML = "xml";
-    private const FORMAT_JSON = "json";
-    private const FORMAT_HTML = "html";
+    private const FORMAT_XML = 'xml';
+    private const FORMAT_JSON = 'json';
+    private const FORMAT_HTML = 'html';
 
     /**
      * Find all requests in the database.
@@ -26,6 +25,7 @@ class RequestApiController extends Controller
     {
         $requests = \App\Request::all();
         $response = $this->showOutput($requests, $format);
+
         return $response;
     }
 
@@ -40,11 +40,12 @@ class RequestApiController extends Controller
     public function showSingleRequest(int $requestId, string $format = null)
     {
         $request = \App\Request::findOrFail($requestId);
+
         return $this->showOutput($request, $format);
     }
 
     /**
-     * Method to convert collection into desired format
+     * Method to convert collection into desired format.
      * @param Collection $resource
      * @param string $format
      * @return Response
@@ -54,14 +55,14 @@ class RequestApiController extends Controller
         $format = strtolower($format);
         $array = [];
         $isCollection = false;
-        $requestName = "request";
+        $requestName = 'request';
 
         if ($resource instanceof \Illuminate\Database\Eloquent\Collection) {
             $array = [
-                'request' => $resource->toArray()
+                'request' => $resource->toArray(),
             ];
             $isCollection = true;
-            $requestName = "collection";
+            $requestName = 'collection';
         } else {
             // Single model
             $array = $resource->toArray();
@@ -92,7 +93,7 @@ class RequestApiController extends Controller
     {
         $this->validate($request, [
             'url' => 'required|url',
-            'method' => 'required|in:' . implode(',', \App\Request::getAllowedMethods()),
+            'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
         ]);
 
         $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));

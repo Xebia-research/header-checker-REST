@@ -4,11 +4,11 @@
 if ($isCollection) {
     foreach ($resource as $key => $entity) {
         foreach ($entity as $key => $collection) {
-            echo "<table>";
+            echo '<table>';
             foreach ($collection as $key => $value) {
                 echo "<tr><td>$key</td> <td>$value</td></tr>";
             }
-            echo "</table></br>";
+            echo '</table></br>';
         }
     }
 } else {
