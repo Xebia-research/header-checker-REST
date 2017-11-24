@@ -1,10 +1,13 @@
 <?php
 
+use App\Request as EndpointRequest;
+use App\Endpoint;
+
 class RequestTest extends ApiTestCase
 {
     public function testIndexAllRequests()
     {
-        $requests = \App\Request::all();
+        $requests = EndpointRequest::all();
 
         $this->actingAs($this->application)
             ->get('requests')
@@ -13,12 +16,14 @@ class RequestTest extends ApiTestCase
 
     public function testShowSingleRequest()
     {
-        /* @var \App\Endpoint $endpoint */
-        $endpoint = \App\Endpoint::create();
-        $request = $endpoint->requests()->create();
+        /* @var Endpoint $endpoint */
+        $endpoint = Endpoint::create();
+        $endpointRequest = $endpoint->requests()->create([
+            'profile_id' => $this->profile->id,
+        ]);
 
         $this->actingAs($this->application)
-            ->get('requests/'.$request->id)
-            ->seeJsonStructure($request->getVisible());
+            ->get('requests/'.$endpointRequest->id)
+            ->seeJsonStructure($endpointRequest->getVisible());
     }
 }

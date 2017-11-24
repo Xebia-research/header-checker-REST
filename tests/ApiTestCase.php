@@ -1,11 +1,19 @@
 <?php
 
+use App\Application;
+use App\Profile;
+
 abstract class ApiTestCase extends TestCase
 {
     /**
-     * @var \App\Application
+     * @var Application
      */
     protected $application;
+
+    /**
+     * @var Profile
+     */
+    protected $profile;
 
     /**
      * Setup the test environment.
@@ -17,5 +25,6 @@ abstract class ApiTestCase extends TestCase
         parent::setUp();
 
         $this->application = factory(App\Application::class)->create();
+        $this->profile = factory(App\Profile::class)->create();
     }
 }
