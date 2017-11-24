@@ -50,6 +50,26 @@ class RequestApiController extends Controller
      */
     public function storeRequest(Request $request): Response
     {
+        $this->validateStoreRequest($request);
+
+        /* @var Endpoint $endpoint */
+        $endpoint = Endpoint::firstOrCreate($request->only('url', 'method'));
+        $endpointRequest = $this->createEndpointRequest($request, $endpoint);
+
+        $this->dispatch(new ExecuteRequestJob($endpointRequest));
+
+        return response('', 201)->withHeaders([
+            'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
+        ]);
+    }
+
+    /**
+     * Validate storeRequest.
+     *
+     * @param Request $request
+     */
+    private function validateStoreRequest(Request $request)
+    {
         $this->validate($request, [
             'url' => [
                 'required',
@@ -74,16 +94,6 @@ class RequestApiController extends Controller
                 'string',
                 'max:16777215'
             ],
-        ]);
-
-        /* @var Endpoint $endpoint */
-        $endpoint = Endpoint::firstOrCreate($request->only('url', 'method'));
-        $endpointRequest = $this->createEndpointRequest($request, $endpoint);
-
-        $this->dispatch(new ExecuteRequestJob($endpointRequest));
-
-        return response('', 201)->withHeaders([
-            'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
         ]);
     }
 
