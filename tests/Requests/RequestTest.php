@@ -9,7 +9,7 @@ class RequestTest extends ApiTestCase
         $this->actingAs($this->application)
             ->get('requests')
             ->seeJsonEquals([
-                'request' => $requests->toArray()
+                'request' => $requests->toArray(),
             ]);
     }
 
@@ -20,9 +20,9 @@ class RequestTest extends ApiTestCase
         $request = $endpoint->requests()->create();
 
         $this->actingAs($this->application)
-            ->get('request/' . $request->id)
+            ->get('request/'.$request->id)
             ->seeJsonStructure([
-               'request' => $request->getVisible()
+               'request' => $request->getVisible(),
             ]);
     }
 }
