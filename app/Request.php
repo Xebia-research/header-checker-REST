@@ -90,6 +90,16 @@ class Request extends Model
     }
 
     /**
+     * Relationship between Request and Profile models.
+     *
+     * @return BelongsTo
+     */
+    public function profile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class);
+    }
+
+    /**
      * @return array
      */
     public static function getAllowedMethods(): array

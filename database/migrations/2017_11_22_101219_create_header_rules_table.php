@@ -19,9 +19,9 @@ class CreateHeaderRulesTable extends Migration
             $table->string('name');
 
             $table->enum('validation_type', [
-                'include',
-                'exclude',
-                'value',
+                'required',
+                'prohibit',
+                'equal',
                 'regex',
             ]);
 
