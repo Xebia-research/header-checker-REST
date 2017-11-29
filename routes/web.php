@@ -17,7 +17,7 @@ $router->group(['middleware' => 'auth', 'namespace' => 'Api'], function () use (
         'uses' => 'DefaultApiController@showWelcomeMessage',
     ]);
 
-    $router->get('requests[/{format}]', [
+    $router->get('requests[/{format:[a-zA-Z]+}]', [
         'as' => 'api.requests.index',
         'uses' => 'RequestApiController@indexAllRequests',
     ]);

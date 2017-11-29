@@ -20,7 +20,7 @@ class RequestTest extends ApiTestCase
         $request = $endpoint->requests()->create();
 
         $this->actingAs($this->application)
-            ->get('request/'.$request->id)
+            ->get('requests/'.$request->id)
             ->seeJsonStructure([
                'request' => $request->getVisible(),
             ]);
