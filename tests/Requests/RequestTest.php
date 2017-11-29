@@ -21,8 +21,6 @@ class RequestTest extends ApiTestCase
 
         $this->actingAs($this->application)
             ->get('requests/'.$request->id)
-            ->seeJsonStructure([
-               'request' => $request->getVisible(),
-            ]);
+            ->seeJsonStructure($request->getVisible());
     }
 }
