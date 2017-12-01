@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Application;
+use Illuminate\Auth\GenericUser;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -30,6 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         // the Application instance via an API key or any other method necessary.
 
         $this->app['auth']->viaRequest('api', function ($request) {
+            return new GenericUser([]);
             if ($apiKey = $request->bearerToken()) {
                 return Application::where('api_key', $apiKey)->first();
             }
