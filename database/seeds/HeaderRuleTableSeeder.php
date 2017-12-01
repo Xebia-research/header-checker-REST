@@ -1,7 +1,7 @@
 <?php
 
-use App\HeaderRule;
 use App\Profile;
+use App\HeaderRule;
 use Illuminate\Database\Seeder;
 
 class HeaderRuleTableSeeder extends Seeder

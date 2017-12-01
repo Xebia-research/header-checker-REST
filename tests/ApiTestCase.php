@@ -1,7 +1,7 @@
 <?php
 
-use App\Application;
 use App\Profile;
+use App\Application;
 
 abstract class ApiTestCase extends TestCase
 {

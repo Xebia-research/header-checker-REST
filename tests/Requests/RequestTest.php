@@ -1,7 +1,7 @@
 <?php
 
-use App\Request as EndpointRequest;
 use App\Endpoint;
+use App\Request as EndpointRequest;
 
 class RequestTest extends ApiTestCase
 {

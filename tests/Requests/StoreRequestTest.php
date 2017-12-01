@@ -19,7 +19,7 @@ class StoreRequestTest extends ApiTestCase
     ];
 
     /**
-     * Setup StoreRequestTest
+     * Setup StoreRequestTest.
      */
     public function setUp()
     {
@@ -141,11 +141,7 @@ class StoreRequestTest extends ApiTestCase
 
     public function testShouldExecuteExecuteJobs()
     {
-        $this->expectsJobs([
-            \App\Jobs\ExecuteRequestJob::class,
-            \App\Jobs\ParseResponseJob::class,
-            \App\Jobs\ValidateResponseJob::class,
-        ]);
+        $this->expectsJobs(\App\Jobs\ExecuteRequestJob::class);
 
         $this->actingAs($this->application)
             ->post('requests', $this->validRequestParameters)

@@ -39,7 +39,7 @@ class HeaderRule extends Model
     {
         $validationRule = $this->validation_type;
         if ($this->validation_value) {
-            $validationRule .= ':'. $this->validation_value;
+            $validationRule .= ':'.$this->validation_value;
         }
 
         return $validationRule;

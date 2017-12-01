@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Endpoint;
 use App\Profile;
-use App\Request as EndpointRequest;
+use App\Endpoint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
 use Illuminate\Http\JsonResponse;
+use App\Request as EndpointRequest;
 use App\Http\Controllers\Controller;
 
 class RequestApiController extends Controller
@@ -77,7 +77,7 @@ class RequestApiController extends Controller
             ],
             'method' => [
                 'required',
-                'in:' . implode(',', \App\Request::getAllowedMethods()),
+                'in:'.implode(',', \App\Request::getAllowedMethods()),
             ],
             'profile' => [
                 'required',
@@ -92,7 +92,7 @@ class RequestApiController extends Controller
             'request_headers.*.value' => [
                 'required',
                 'string',
-                'max:16777215'
+                'max:16777215',
             ],
         ]);
     }
