@@ -139,9 +139,13 @@ class StoreRequestTest extends ApiTestCase
         $this->seeInDatabase('endpoints', array_only($this->validRequestParameters, ['url', 'method']));
     }
 
-    public function testShouldExecuteExecuteRequestJob()
+    public function testShouldExecuteExecuteJobs()
     {
-        $this->expectsJobs(\App\Jobs\ExecuteRequestJob::class);
+        $this->expectsJobs([
+            \App\Jobs\ExecuteRequestJob::class,
+            \App\Jobs\ParseResponseJob::class,
+            \App\Jobs\ValidateResponseJob::class,
+        ]);
 
         $this->actingAs($this->application)
             ->post('requests', $this->validRequestParameters)
