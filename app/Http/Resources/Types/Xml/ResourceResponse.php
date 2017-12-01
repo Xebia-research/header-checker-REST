@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\Types\Xml;
 
+use Spatie\ArrayToXml\ArrayToXml;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Responsable;
-use Spatie\ArrayToXml\ArrayToXml;
 
 class ResourceResponse implements Responsable
 {

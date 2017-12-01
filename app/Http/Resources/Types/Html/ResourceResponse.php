@@ -71,7 +71,7 @@ class ResourceResponse implements Responsable
          * makes looping through everything in the view so much easier.
          */
         if (count($data['data']) == count($data['data'], COUNT_RECURSIVE)) {
-            $data['data'][0] = array_splice($data['data'],0);
+            $data['data'][0] = array_splice($data['data'], 0);
         }
 
         $output = array_merge_recursive($data, $with, $additional);

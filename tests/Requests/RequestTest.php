@@ -4,12 +4,12 @@ class RequestTest extends ApiTestCase
 {
     public function testIndexAllRequests()
     {
-        $requests = \App\Request::all();
+        $requests = \App\Request::paginate();
 
         $this->actingAs($this->application)
             ->get('requests')
             ->seeJsonEquals([
-                'request' => $requests->toArray(),
+                'data' => $requests->toArray(),
             ]);
     }
 
@@ -21,6 +21,8 @@ class RequestTest extends ApiTestCase
 
         $this->actingAs($this->application)
             ->get('requests/'.$request->id)
-            ->seeJsonStructure($request->getVisible());
+            ->seeJsonStructure([
+                'data' => $request->toArray(),
+            ]);
     }
 }

@@ -18,12 +18,12 @@
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <?php if (!empty($links)): ?>
-        <?php // TODO ?>
+    <?php if (! empty($links)): ?>
+        <?php // TODO?>
     <?php endif; ?>
 
-    <?php if (!empty($meta)): ?>
-        <?php // TODO ?>
+    <?php if (! empty($meta)): ?>
+        <?php // TODO?>
     <?php endif; ?>
 </table>
 </body>
