@@ -6,9 +6,6 @@ use App\Endpoint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
-use Illuminate\Http\JsonResponse;
-use Spatie\ArrayToXml\ArrayToXml;
-use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 
 class RequestApiController extends Controller
@@ -20,65 +17,29 @@ class RequestApiController extends Controller
     /**
      * Find all requests in the database.
      *
-     * @return JsonResponse
+     * @param  null|string  $format
+     * @return Response
      */
-    public function indexAllRequests(string $format = null)
+    public function indexAllRequests(?string $format = null)
     {
-        $requests = \App\Request::all();
-        $response = $this->showOutput($requests, $format);
+        $requests = \App\Request::paginate();
 
-        return $response;
+        return $this->resourceCollectionResponse($requests, $format);
     }
 
     /**
      * Find request in the database.
-     * Throwed 404 when request is not found.
+     * Throw 404 when request is not found.
      *
-     * @param int $requestId
-     * @param string $format
+     * @param  int  $requestId
+     * @param  null|string  $format
      * @return Response
      */
-    public function showSingleRequest(int $requestId, string $format = null)
+    public function showSingleRequest(int $requestId, ?string $format = null)
     {
         $request = \App\Request::findOrFail($requestId);
 
-        return $this->showOutput($request, $format);
-    }
-
-    /**
-     * Method to convert collection into desired format.
-     * @param Collection $resource
-     * @param string $format
-     * @return Response
-     */
-    public function showOutput($resource, string $format = null)
-    {
-        $format = strtolower($format);
-        $array = [];
-        $isCollection = false;
-        $requestName = 'request';
-
-        if ($resource instanceof \Illuminate\Database\Eloquent\Collection) {
-            $array = [
-                'request' => $resource->toArray(),
-            ];
-            $isCollection = true;
-            $requestName = 'collection';
-        } else {
-            // Single model
-            $array = $resource->toArray();
-        }
-
-        switch ($format) {
-            case static::FORMAT_JSON:
-                return response()->json($array);
-            case static::FORMAT_XML:
-                return ArrayToXml::convert($array, $requestName);
-            case static::FORMAT_HTML:
-                    return view('html_request', ['resource' => $array, 'isCollection' => $isCollection]);
-            default:
-                return response()->json($array);
-        }
+        return $this->singleResourceResponse($request, $format);
     }
 
     /**
@@ -113,5 +74,37 @@ class RequestApiController extends Controller
         return response('', 201)->withHeaders([
             'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
         ]);
+    }
+
+    /**
+     * @param  mixed  $resource
+     * @param  null|string  $format
+     * @return \App\Http\Resources\Html\Request|\App\Http\Resources\Json\Request|\App\Http\Resources\Xml\Request
+     */
+    protected function singleResourceResponse($resource, ?string $format)
+    {
+        if ($format == static::FORMAT_HTML) {
+            return new \App\Http\Resources\Html\Request($resource);
+        } elseif ($format == static::FORMAT_XML) {
+            return new \App\Http\Resources\Xml\Request($resource);
+        } else {
+            return new \App\Http\Resources\Json\Request($resource);
+        }
+    }
+
+    /**
+     * @param  mixed  $resources
+     * @param  null|string  $format
+     * @return \App\Http\Resources\Html\RequestCollection|\App\Http\Resources\Json\RequestCollection|\App\Http\Resources\Xml\RequestCollection
+     */
+    protected function resourceCollectionResponse($resources, ?string $format)
+    {
+        if ($format == static::FORMAT_HTML) {
+            return new \App\Http\Resources\Html\RequestCollection($resources);
+        } elseif ($format == static::FORMAT_XML) {
+            return new \App\Http\Resources\Xml\RequestCollection($resources);
+        } else {
+            return new \App\Http\Resources\Json\RequestCollection($resources);
+        }
     }
 }
