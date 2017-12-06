@@ -18,6 +18,9 @@ class CreateHeaderRulesTable extends Migration
 
             $table->string('name');
 
+            $table->mediumText('description')
+                ->nullable();
+
             $table->enum('validation_type', [
                 'required',
                 'prohibit',

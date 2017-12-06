@@ -34,9 +34,18 @@ class RequestApiController extends Controller
      */
     public function showSingleRequest(int $requestId, ?string $format = null)
     {
-        $request = EndpointRequest::findOrFail($requestId);
+        $request = EndpointRequest::with('endpoint')
+            ->with('profile')
+            ->with('requestHeaders')
+            ->with('responses')
+            ->with('responses.responseHeaders')
+            ->findOrFail($requestId);
 
-        return $this->singleResourceResponse($request, $format);
+        if ($format == static::FORMAT_HTML) {
+            return view('requests.show', compact('request'));
+        } else {
+            return $this->singleResourceResponse($request, $format);
+        }
     }
 
     /**

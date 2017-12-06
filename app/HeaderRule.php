@@ -8,19 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class HeaderRule extends Model
 {
     /**
-     * Attributes that should be visible when calling the toArray() method.
-     *
-     * @var array
-     */
-    protected $visible = [
-        'id',
-        'name',
-        'validation_type',
-        'validation_value',
-        'risk_level',
-    ];
-
-    /**
      * Relationship between HeaderRule and Profile models.
      *
      * @return BelongsToMany

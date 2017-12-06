@@ -20,6 +20,10 @@ class CreateRequestsTable extends Migration
             $table->foreign('endpoint_id')
                 ->references('id')->on('endpoints');
 
+            $table->unsignedInteger('profile_id');
+            $table->foreign('profile_id')
+                ->references('id')->on('profiles');
+
             $table->string('error_message')
                 ->nullable();
 

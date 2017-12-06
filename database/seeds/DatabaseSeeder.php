@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
+        $this->call(ApplicationTableSeeder::class);
         $this->call(ProfileTableSeeder::class);
         $this->call(HeaderRuleTableSeeder::class);
 
