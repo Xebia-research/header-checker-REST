@@ -4,19 +4,15 @@ class RequestTest extends ApiTestCase
 {
     public function testIndexAllRequests()
     {
-        /*
-         * Love-hate relationship with Travis CI...
-         * @sjongejan has better tests in his branch.
-         */
-        $this->assertTrue(true);
+        $this->markTestIncomplete(
+            'This test has not been implemented yet.'
+        );
     }
 
     public function testShowSingleRequest()
     {
-        /*
-         * Love-hate relationship with Travis CI...
-         * @sjongejan has better tests in his branch.
-         */
-        $this->assertTrue(true);
+        $this->markTestIncomplete(
+            'This test has not been implemented yet.'
+        );
     }
 }

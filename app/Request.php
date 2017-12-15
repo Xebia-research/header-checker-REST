@@ -32,20 +32,8 @@ class Request extends Model
      * @var array
      */
     protected $fillable = [
+        'profile_id',
         'error_message',
-    ];
-
-    /**
-     * Attributes that should be visible when calling toJson().
-     *
-     * @var array
-     */
-    protected $visible = [
-        'id',
-        'endpoint_id',
-        'error_message',
-        'created_at',
-        'updated_at',
     ];
 
     /**
@@ -86,6 +74,16 @@ class Request extends Model
     public function responseHeaders(): HasManyThrough
     {
         return $this->hasManyThrough(ResponseHeader::class, Response::class);
+    }
+
+    /**
+     * Relationship between Request and Profile models.
+     *
+     * @return BelongsTo
+     */
+    public function profile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class);
     }
 
     /**

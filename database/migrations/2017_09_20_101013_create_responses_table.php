@@ -23,6 +23,9 @@ class CreateResponsesTable extends Migration
             $table->unsignedSmallInteger('status_code');
             $table->string('reason_phrase');
 
+            $table->text('findings')
+                ->nullable();
+
             $table->timestamps();
         });
     }

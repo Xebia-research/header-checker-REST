@@ -16,16 +16,16 @@ class ExecuteRequestJob extends Job
      *
      * @var EndpointRequest
      */
-    private $request;
+    private $endpointRequest;
 
     /**
      * ExecuteRequestJob constructor.
      *
-     * @param EndpointRequest $request
+     * @param EndpointRequest $endpointRequest
      */
-    public function __construct(EndpointRequest $request)
+    public function __construct(EndpointRequest $endpointRequest)
     {
-        $this->request = $request;
+        $this->endpointRequest = $endpointRequest;
     }
 
     /**
@@ -36,12 +36,10 @@ class ExecuteRequestJob extends Job
      */
     public function handle(Client $client)
     {
-        $endpoint = $this->request->endpoint;
+        $endpoint = $this->endpointRequest->endpoint;
 
-        $application_profile = $this->request->application_profile ?? 'api'; // TODO: Default application profiles?
-
-        $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) use ($application_profile) {
-            dispatch(new ParseResponseJob($this->request, $response));
+        $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
+            dispatch(new ParseResponseJob($this->endpointRequest, $response));
         };
 
         try {
@@ -51,13 +49,13 @@ class ExecuteRequestJob extends Job
                     'max' => 10,
                     'on_redirect' => $onRedirect,
                 ],
-                'headers' => $this->request->requestHeaders->pluck('value', 'name')->toArray(),
+                'headers' => $this->endpointRequest->requestHeaders->pluck('value', 'name')->toArray(),
             ]);
 
-            dispatch(new ParseResponseJob($this->request, $response));
+            dispatch(new ParseResponseJob($this->endpointRequest, $response));
         } catch (RequestException $e) {
-            $this->request->error_message = $e->getMessage();
-            $this->request->save();
+            $this->endpointRequest->error_message = $e->getMessage();
+            $this->endpointRequest->save();
         }
     }
 }

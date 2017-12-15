@@ -13,8 +13,14 @@
 
 $factory->define(App\Application::class, function (Faker\Generator $faker) {
     return [
-        'name'        => $faker->name,
+        'name' => $faker->name,
         'description' => $faker->text,
-        'api_key'     => str_random(32),
+        'api_key' => str_random(32),
+    ];
+});
+
+$factory->define(App\Profile::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
     ];
 });

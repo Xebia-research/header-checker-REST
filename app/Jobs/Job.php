@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Validation\Validator;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,4 +22,17 @@ abstract class Job implements ShouldQueue
     */
 
     use InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * Get validator.
+     *
+     * @param array $input
+     * @param array $rules
+     * @return validator
+     */
+    protected function getValidator(array $input, array $rules)
+    {
+        return app('validator')
+            ->make($input, $rules);
+    }
 }

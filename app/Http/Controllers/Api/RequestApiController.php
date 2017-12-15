@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Profile;
 use App\Endpoint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Jobs\ExecuteRequestJob;
-use App\Http\Controllers\Controller;
+use App\Request as EndpointRequest;
 
 class RequestApiController extends Controller
 {
-    private const FORMAT_XML = 'xml';
-    private const FORMAT_JSON = 'json';
-    private const FORMAT_HTML = 'html';
-
     /**
      * Find all requests in the database.
      *
-     * @param  null|string  $format
-     * @return Response
+     * @param null|string $format
+     * @return \App\Http\Resources\Html\RequestCollection|\App\Http\Resources\Json\RequestCollection|\App\Http\Resources\Xml\RequestCollection
      */
     public function indexAllRequests(?string $format = null)
     {
-        $requests = \App\Request::paginate();
+        $requests = EndpointRequest::paginate();
 
         return $this->resourceCollectionResponse($requests, $format);
     }
@@ -31,15 +28,25 @@ class RequestApiController extends Controller
      * Find request in the database.
      * Throw 404 when request is not found.
      *
-     * @param  int  $requestId
-     * @param  null|string  $format
-     * @return Response
+     * @param int $requestId
+     * @param null|string $format
+     * @return \App\Http\Resources\Html\Request|\App\Http\Resources\Json\Request|\App\Http\Resources\Xml\Request
      */
     public function showSingleRequest(int $requestId, ?string $format = null)
     {
-        $request = \App\Request::findOrFail($requestId);
+        $request = EndpointRequest::with([
+            'endpoint',
+            'profile',
+            'requestHeaders',
+            'responses',
+            'responses.responseHeaders',
+        ])->findOrFail($requestId);
 
-        return $this->singleResourceResponse($request, $format);
+        if ($format == static::FORMAT_HTML) {
+            return view('requests.show', compact('request'));
+        } else {
+            return $this->singleResourceResponse($request, $format);
+        }
     }
 
     /**
@@ -53,21 +60,11 @@ class RequestApiController extends Controller
      */
     public function storeRequest(Request $request): Response
     {
-        $this->validate($request, [
-            'url' => 'required|url',
-            'method' => 'required|in:'.implode(',', \App\Request::getAllowedMethods()),
-            'request_headers' => 'array',
-            'request_headers.*.name' => 'required|string|max:255',
-            'request_headers.*.value' => 'required|string|max:16777215',
-        ]);
+        $this->validateStoreRequest($request);
 
         /* @var Endpoint $endpoint */
-        $endpoint = \App\Endpoint::firstOrCreate($request->only('url', 'method'));
-
-        /* @var \App\Request $endpointRequest */
-        $endpointRequest = $endpoint->requests()->create();
-
-        $endpointRequest->requestHeaders()->createMany($request->get('request_headers', []));
+        $endpoint = Endpoint::firstOrCreate($request->only('url', 'method'));
+        $endpointRequest = $this->createEndpointRequest($request, $endpoint);
 
         $this->dispatch(new ExecuteRequestJob($endpointRequest));
 
@@ -77,34 +74,58 @@ class RequestApiController extends Controller
     }
 
     /**
-     * @param  mixed  $resource
-     * @param  null|string  $format
-     * @return \App\Http\Resources\Html\Request|\App\Http\Resources\Json\Request|\App\Http\Resources\Xml\Request
+     * Validate storeRequest.
+     *
+     * @param Request $request
      */
-    protected function singleResourceResponse($resource, ?string $format)
+    private function validateStoreRequest(Request $request)
     {
-        if ($format == static::FORMAT_HTML) {
-            return new \App\Http\Resources\Html\Request($resource);
-        } elseif ($format == static::FORMAT_XML) {
-            return new \App\Http\Resources\Xml\Request($resource);
-        } else {
-            return new \App\Http\Resources\Json\Request($resource);
-        }
+        $this->validate($request, [
+            'url' => [
+                'required',
+                'url',
+            ],
+            'method' => [
+                'required',
+                'in:'.implode(',', \App\Request::getAllowedMethods()),
+            ],
+            'profile' => [
+                'required',
+                'exists:profiles,identifier',
+            ],
+            'request_headers' => 'array',
+            'request_headers.*.name' => [
+                'required',
+                'string',
+                'alpha_dash',
+                'max:255',
+            ],
+            'request_headers.*.value' => [
+                'required',
+                'string',
+                'max:16777215',
+            ],
+        ]);
     }
 
     /**
-     * @param  mixed  $resources
-     * @param  null|string  $format
-     * @return \App\Http\Resources\Html\RequestCollection|\App\Http\Resources\Json\RequestCollection|\App\Http\Resources\Xml\RequestCollection
+     * Create EndpointRequest for Request and Endpoint.
+     *
+     * @param Request $request
+     * @param Endpoint $endpoint
+     * @return EndpointRequest
      */
-    protected function resourceCollectionResponse($resources, ?string $format)
+    private function createEndpointRequest(Request $request, Endpoint $endpoint): EndpointRequest
     {
-        if ($format == static::FORMAT_HTML) {
-            return new \App\Http\Resources\Html\RequestCollection($resources);
-        } elseif ($format == static::FORMAT_XML) {
-            return new \App\Http\Resources\Xml\RequestCollection($resources);
-        } else {
-            return new \App\Http\Resources\Json\RequestCollection($resources);
-        }
+        $profile = Profile::whereIdentifier($request->get('profile'))
+            ->first();
+
+        /* @var \App\Request $endpointRequest */
+        $endpointRequest = $endpoint->requests()->create([
+            'profile_id' => $profile->id,
+        ]);
+        $endpointRequest->requestHeaders()->createMany($request->get('request_headers', []));
+
+        return $endpointRequest;
     }
 }
