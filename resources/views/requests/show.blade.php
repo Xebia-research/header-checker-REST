@@ -22,7 +22,7 @@
                     <dl class="row">
                         <dt class="col-sm-3">Url</dt>
                         <dd class="col-sm-9">
-                            <a href="{{$request->endpoint->url}}" target="_blank">
+                            <a href="{{$request->endpoint->url}}" rel="noopener noreferrer" target="_blank">
                                 {{$request->endpoint->url}}
                             </a>
                         </dd>

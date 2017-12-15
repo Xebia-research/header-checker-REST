@@ -34,12 +34,13 @@ class RequestApiController extends Controller
      */
     public function showSingleRequest(int $requestId, ?string $format = null)
     {
-        $request = EndpointRequest::with('endpoint')
-            ->with('profile')
-            ->with('requestHeaders')
-            ->with('responses')
-            ->with('responses.responseHeaders')
-            ->findOrFail($requestId);
+        $request = EndpointRequest::with([
+            'endpoint',
+            'profile',
+            'requestHeaders',
+            'responses',
+            'responses.responseHeaders',
+        ])->findOrFail($requestId);
 
         if ($format == static::FORMAT_HTML) {
             return view('requests.show', compact('request'));
@@ -96,6 +97,7 @@ class RequestApiController extends Controller
             'request_headers.*.name' => [
                 'required',
                 'string',
+                'alpha_dash',
                 'max:255',
             ],
             'request_headers.*.value' => [

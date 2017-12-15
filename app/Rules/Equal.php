@@ -16,6 +16,6 @@ class Equal implements Rule
      */
     public function validate($attribute, $value, $parameters, $validator): Bool
     {
-        return $value === $parameters[0];
+        return $value === head($parameters);
     }
 }
