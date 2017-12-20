@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Profile;
 use App\Endpoint;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Request;
 use App\Jobs\ExecuteRequestJob;
-use App\Request as EndpointRequest;
+use Illuminate\Support\Collection;
 
 class RequestApiController extends Controller
 {
@@ -19,7 +18,7 @@ class RequestApiController extends Controller
      */
     public function indexAllRequests(?string $format = null)
     {
-        $requests = EndpointRequest::paginate();
+        $requests = Request::paginate();
 
         return $this->resourceCollectionResponse($requests, $format);
     }
@@ -34,7 +33,7 @@ class RequestApiController extends Controller
      */
     public function showSingleRequest(int $requestId, ?string $format = null)
     {
-        $request = EndpointRequest::with([
+        $request = Request::with([
             'endpoint',
             'profile',
             'requestHeaders',
@@ -50,35 +49,13 @@ class RequestApiController extends Controller
     }
 
     /**
-     * Validate if parameters are valid.
-     * Find or create endpoint based on url and method.
-     * Create a new request for the endpoint.
-     * Dispatch ExecuteRequestJob.
+     * Store request and enqueue ExecuteRequestJob.
      *
-     * @param Request $request
-     * @return Response
+     * @param \Illuminate\Http\Request $request
+     * @param null|string $format
+     * @return \App\Http\Resources\Html\Request|\App\Http\Resources\Json\Request|\App\Http\Resources\Xml\Request
      */
-    public function storeRequest(Request $request): Response
-    {
-        $this->validateStoreRequest($request);
-
-        /* @var Endpoint $endpoint */
-        $endpoint = Endpoint::firstOrCreate($request->only('url', 'method'));
-        $endpointRequest = $this->createEndpointRequest($request, $endpoint);
-
-        $this->dispatch(new ExecuteRequestJob($endpointRequest));
-
-        return response('', 201)->withHeaders([
-            'Location' => route('api.requests.show', ['requestId' => $endpointRequest]),
-        ]);
-    }
-
-    /**
-     * Validate storeRequest.
-     *
-     * @param Request $request
-     */
-    private function validateStoreRequest(Request $request)
+    public function store(\Illuminate\Http\Request $request, ?string $format = null)
     {
         $this->validate($request, [
             'url' => [
@@ -106,26 +83,87 @@ class RequestApiController extends Controller
                 'max:16777215',
             ],
         ]);
+
+        $request = $this->createRequest($request->all());
+
+        if ($format == static::FORMAT_HTML) {
+            return view('requests.show', compact('request'));
+        } else {
+            return $this->singleResourceResponse($request, $format);
+        }
     }
 
     /**
-     * Create EndpointRequest for Request and Endpoint.
+     * Store requests and enqueue ExecuteRequestJob in batch.
      *
-     * @param Request $request
-     * @param Endpoint $endpoint
-     * @return EndpointRequest
+     * @param \Illuminate\Http\Request $request
+     * @param null|string $format
+     * @return \App\Http\Resources\Html\RequestCollection|\App\Http\Resources\Json\RequestCollection|\App\Http\Resources\Xml\RequestCollection
      */
-    private function createEndpointRequest(Request $request, Endpoint $endpoint): EndpointRequest
+    public function storeBatch(\Illuminate\Http\Request $request, ?string $format = null)
     {
-        $profile = Profile::whereIdentifier($request->get('profile'))
+        $this->validate($request, [
+            'requests' => [
+                'required',
+                'array',
+            ],
+            'requests.*.url' => [
+                'required',
+                'url',
+            ],
+            'requests.*.method' => [
+                'required',
+                'in:'.implode(',', \App\Request::getAllowedMethods()),
+            ],
+            'requests.*.profile' => [
+                'required',
+                'exists:profiles,identifier',
+            ],
+            'requests.*.request_headers' => 'array',
+            'requests.*.request_headers.*.name' => [
+                'required',
+                'string',
+                'alpha_dash',
+                'max:255',
+            ],
+            'requests.*.request_headers.*.value' => [
+                'required',
+                'string',
+                'max:16777215',
+            ],
+        ]);
+
+        $requests = collect();
+        foreach ($request->get('requests') as $parameters) {
+            $request = $this->createRequest($parameters);
+            $requests->push($request);
+        }
+
+        return $this->resourceCollectionResponse($requests, $format);
+    }
+
+    /**
+     * Create Request for array of parameters.
+     *
+     * @param array $parameters
+     * @return Request
+     */
+    private function createRequest(array $parameters): Request
+    {
+        /* @var Endpoint $endpoint */
+        $endpoint = Endpoint::firstOrCreate(array_only($parameters, ['url', 'method']));
+
+        $profile = Profile::whereIdentifier(data_get($parameters, 'profile'))
             ->first();
 
-        /* @var \App\Request $endpointRequest */
-        $endpointRequest = $endpoint->requests()->create([
+        /* @var \App\Request $request */
+        $request = $endpoint->requests()->create([
             'profile_id' => $profile->id,
         ]);
-        $endpointRequest->requestHeaders()->createMany($request->get('request_headers', []));
+        $request->requestHeaders()->createMany(data_get($parameters, 'request_headers', []));
 
-        return $endpointRequest;
+        $this->dispatch(new ExecuteRequestJob($request));
+
+        return $request;
     }
 }

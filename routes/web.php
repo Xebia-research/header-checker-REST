@@ -22,8 +22,13 @@ $router->group(['middleware' => 'auth', 'namespace' => 'Api'], function () use (
         'uses' => 'RequestApiController@showSingleRequest',
     ]);
 
-    $router->post('requests', [
+    $router->post('requests/batch[/{format}]', [
+        'as' => 'api.requests.store_batch',
+        'uses' => 'RequestApiController@storeBatch',
+    ]);
+
+    $router->post('requests[/{format}]', [
         'as' => 'api.requests.store',
-        'uses' => 'RequestApiController@storeRequest',
+        'uses' => 'RequestApiController@store',
     ]);
 });
