@@ -33,7 +33,7 @@ class Request extends Resource
         return [
             'id' => $this->id,
 
-            $this->mergeWhen(!empty($this->error_message), [
+            $this->mergeWhen(! empty($this->error_message), [
                 'error_message' => $this->error_message,
             ]),
 

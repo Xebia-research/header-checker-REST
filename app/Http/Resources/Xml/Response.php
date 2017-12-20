@@ -42,18 +42,18 @@ class Response extends Resource
                         return [
                             'name' => $finding['name'],
 
-                            $this->mergeWhen(!empty($finding['description']), [
+                            $this->mergeWhen(! empty($finding['description']), [
                                 'description' => $finding['description'],
                             ]),
 
                             'risk_level' => $finding['risk_level'],
                             'validation_type' => $finding['validation_type'],
 
-                            $this->mergeWhen(!empty($finding['validation_value']), [
+                            $this->mergeWhen(! empty($finding['validation_value']), [
                                 'validation_value' => $finding['validation_value'],
                             ]),
                         ];
-                    })->toArray()
+                    })->toArray(),
                 ],
             ]),
 
