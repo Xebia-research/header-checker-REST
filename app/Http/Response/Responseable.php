@@ -16,7 +16,8 @@ trait Responseable
      *
      * @param Response $response
      */
-    public function __construct(Request $request, Response $response) {
+    public function __construct(Request $request, Response $response)
+    {
         $response->setRequest($request);
 
         $this->response = $response;

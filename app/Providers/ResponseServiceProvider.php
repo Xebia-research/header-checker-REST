@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Http\Response\Response;
-use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 
 class ResponseServiceProvider extends ServiceProvider

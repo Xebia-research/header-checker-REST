@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Profile;
-use App\Endpoint;
 use App\Request;
+use App\Endpoint;
 use App\Jobs\ExecuteRequestJob;
 
 class RequestsController extends Controller
@@ -56,7 +56,7 @@ class RequestsController extends Controller
             ],
             'method' => [
                 'required',
-                'in:' . implode(',', \App\Request::getAllowedMethods()),
+                'in:'.implode(',', \App\Request::getAllowedMethods()),
             ],
             'profile' => [
                 'required',
@@ -112,7 +112,7 @@ class RequestsController extends Controller
             ],
             'requests.*.method' => [
                 'required',
-                'in:' . implode(',', \App\Request::getAllowedMethods()),
+                'in:'.implode(',', \App\Request::getAllowedMethods()),
             ],
             'requests.*.profile' => [
                 'required',
