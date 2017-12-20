@@ -1,6 +1,6 @@
 <?php
 
-$router->group(['middleware' => 'auth', 'prefix' => 'api'], function () use ($router) {
+$router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('requests', [
         'as' => 'api.requests.index',
         'uses' => 'RequestsController@index',
