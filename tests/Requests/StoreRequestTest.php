@@ -34,7 +34,7 @@ class StoreRequestTest extends ApiTestCase
 
     public function testShouldRespond422WhenRequestParametersAreNotPresent()
     {
-        $response = $this->actingAs($this->application)->post('requests');
+        $response = $this->actingAs($this->application)->post('api/requests');
         $response->assertResponseStatus(422);
     }
 
@@ -43,7 +43,7 @@ class StoreRequestTest extends ApiTestCase
         foreach ($this->validRequestParameters as $name => $value) {
             $this->actingAs($this->application)
                 ->post(
-                    'requests',
+                    'api/requests',
                     array_except($this->validRequestParameters, [$name])
                 )->assertResponseStatus(422);
         }
@@ -56,7 +56,7 @@ class StoreRequestTest extends ApiTestCase
             $requestParameters[$name] = '';
 
             $this->actingAs($this->application)
-                ->post('requests', $requestParameters)
+                ->post('api/requests', $requestParameters)
                 ->assertResponseStatus(422);
         }
     }
@@ -68,7 +68,7 @@ class StoreRequestTest extends ApiTestCase
             $requestParameters[$name] = str_random();
 
             $this->actingAs($this->application)
-                ->post('requests', $requestParameters)
+                ->post('api/requests', $requestParameters)
                 ->assertResponseStatus(422);
         }
     }
@@ -81,7 +81,7 @@ class StoreRequestTest extends ApiTestCase
             $requestParameters['method'] = $method;
 
             $this->actingAs($this->application)
-                ->post('requests', $requestParameters)
+                ->post('api/requests', $requestParameters)
                 ->assertResponseStatus(201);
         }
     }
@@ -92,7 +92,7 @@ class StoreRequestTest extends ApiTestCase
         $requestParameters['request_headers'] = str_random();
 
         $this->actingAs($this->application)
-            ->post('requests', $requestParameters)
+            ->post('api/requests', $requestParameters)
             ->assertResponseStatus(422);
     }
 
@@ -105,7 +105,7 @@ class StoreRequestTest extends ApiTestCase
         $requestParameters['request_headers'] = $requestHeadersParameters;
 
         $this->actingAs($this->application)
-            ->post('requests', $requestParameters)
+            ->post('api/requests', $requestParameters)
             ->assertResponseStatus(422);
     }
 
@@ -118,24 +118,14 @@ class StoreRequestTest extends ApiTestCase
         $requestParameters['request_headers'] = $requestHeadersParameters;
 
         $this->actingAs($this->application)
-            ->post('requests', $requestParameters)
+            ->post('api/requests', $requestParameters)
             ->assertResponseStatus(422);
-    }
-
-    public function testShouldResponse201WhenRequestHeadersAreValid()
-    {
-        $requestParameters = $this->validRequestParameters;
-        $requestParameters['request_headers'] = $this->validRequestHeadersParameters;
-
-        $this->actingAs($this->application)
-            ->post('requests', $requestParameters)
-            ->assertResponseStatus(201);
     }
 
     public function testShouldCreateEndpoint()
     {
         $this->actingAs($this->application)
-            ->post('requests', $this->validRequestParameters);
+            ->post('api/requests', $this->validRequestParameters);
         $this->seeInDatabase('endpoints', array_only($this->validRequestParameters, ['url', 'method']));
     }
 
@@ -144,14 +134,6 @@ class StoreRequestTest extends ApiTestCase
         $this->expectsJobs(\App\Jobs\ExecuteRequestJob::class);
 
         $this->actingAs($this->application)
-            ->post('requests', $this->validRequestParameters)
-            ->assertResponseStatus(201);
-    }
-
-    public function testShouldRespondWithLocation()
-    {
-        $this->actingAs($this->application)
-            ->post('requests', $this->validRequestParameters)
-            ->seeHeader('Location');
+            ->post('api/requests', $this->validRequestParameters);
     }
 }

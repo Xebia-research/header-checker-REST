@@ -11,23 +11,23 @@
 |
 */
 
-$router->group(['middleware' => 'auth', 'namespace' => 'Api'], function () use ($router) {
-    $router->get('requests[/{format:[a-z]+}]', [
+$router->group(['middleware' => 'auth', 'namespace' => 'Api', 'prefix'=>'api'], function () use ($router) {
+    $router->get('requests', [
         'as' => 'api.requests.index',
-        'uses' => 'RequestApiController@indexAllRequests',
+        'uses' => 'RequestApiController@index',
     ]);
 
-    $router->get('requests/{requestId:[\d]+}[/{format}]', [
+    $router->get('requests/{requestId:[\d]+}', [
         'as' => 'api.requests.show',
-        'uses' => 'RequestApiController@showSingleRequest',
+        'uses' => 'RequestApiController@show',
     ]);
 
-    $router->post('requests/batch[/{format}]', [
+    $router->post('requests/batch', [
         'as' => 'api.requests.store_batch',
         'uses' => 'RequestApiController@storeBatch',
     ]);
 
-    $router->post('requests[/{format}]', [
+    $router->post('requests', [
         'as' => 'api.requests.store',
         'uses' => 'RequestApiController@store',
     ]);

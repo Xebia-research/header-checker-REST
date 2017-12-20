@@ -6,32 +6,28 @@ use App\Profile;
 use App\Endpoint;
 use App\Request;
 use App\Jobs\ExecuteRequestJob;
-use Illuminate\Support\Collection;
 
 class RequestApiController extends Controller
 {
     /**
-     * Find all requests in the database.
+     * Get all requests from the database.
      *
-     * @param null|string $format
-     * @return \App\Http\Resources\Html\RequestCollection|\App\Http\Resources\Json\RequestCollection|\App\Http\Resources\Xml\RequestCollection
+     * @return \App\Http\Resources\Json\RequestCollection|\App\Http\Resources\Xml\RequestCollection
      */
-    public function indexAllRequests(?string $format = null)
+    public function index()
     {
         $requests = Request::paginate();
 
-        return $this->resourceCollectionResponse($requests, $format);
+        return $this->response->resourceCollectionResponse($requests);
     }
 
     /**
-     * Find request in the database.
-     * Throw 404 when request is not found.
+     * Get one request from the database.
      *
      * @param int $requestId
-     * @param null|string $format
-     * @return \App\Http\Resources\Html\Request|\App\Http\Resources\Json\Request|\App\Http\Resources\Xml\Request
+     * @return \App\Http\Resources\Json\Request|\App\Http\Resources\Xml\Request
      */
-    public function showSingleRequest(int $requestId, ?string $format = null)
+    public function show(int $requestId)
     {
         $request = Request::with([
             'endpoint',
@@ -41,21 +37,16 @@ class RequestApiController extends Controller
             'responses.responseHeaders',
         ])->findOrFail($requestId);
 
-        if ($format == static::FORMAT_HTML) {
-            return view('requests.show', compact('request'));
-        } else {
-            return $this->singleResourceResponse($request, $format);
-        }
+        return $this->response->singleResourceResponse($request);
     }
 
     /**
-     * Store request and enqueue ExecuteRequestJob.
+     * Store a request in the database and enqueue the ExecuteRequestJob.
      *
      * @param \Illuminate\Http\Request $request
-     * @param null|string $format
-     * @return \App\Http\Resources\Html\Request|\App\Http\Resources\Json\Request|\App\Http\Resources\Xml\Request
+     * @return \App\Http\Resources\Json\Request|\App\Http\Resources\Xml\Request
      */
-    public function store(\Illuminate\Http\Request $request, ?string $format = null)
+    public function store(\Illuminate\Http\Request $request)
     {
         $this->validate($request, [
             'url' => [
@@ -64,7 +55,7 @@ class RequestApiController extends Controller
             ],
             'method' => [
                 'required',
-                'in:'.implode(',', \App\Request::getAllowedMethods()),
+                'in:' . implode(',', \App\Request::getAllowedMethods()),
             ],
             'profile' => [
                 'required',
@@ -86,21 +77,16 @@ class RequestApiController extends Controller
 
         $request = $this->createRequest($request->all());
 
-        if ($format == static::FORMAT_HTML) {
-            return view('requests.show', compact('request'));
-        } else {
-            return $this->singleResourceResponse($request, $format);
-        }
+        return $this->response->singleResourceResponse($request);
     }
 
     /**
-     * Store requests and enqueue ExecuteRequestJob in batch.
+     * Store a batch requests in the database and enqueue the ExecuteRequestJob's.
      *
      * @param \Illuminate\Http\Request $request
-     * @param null|string $format
-     * @return \App\Http\Resources\Html\RequestCollection|\App\Http\Resources\Json\RequestCollection|\App\Http\Resources\Xml\RequestCollection
+     * @return \App\Http\Resources\Json\RequestCollection|\App\Http\Resources\Xml\RequestCollection
      */
-    public function storeBatch(\Illuminate\Http\Request $request, ?string $format = null)
+    public function storeBatch(\Illuminate\Http\Request $request)
     {
         $this->validate($request, [
             'requests' => [
@@ -113,7 +99,7 @@ class RequestApiController extends Controller
             ],
             'requests.*.method' => [
                 'required',
-                'in:'.implode(',', \App\Request::getAllowedMethods()),
+                'in:' . implode(',', \App\Request::getAllowedMethods()),
             ],
             'requests.*.profile' => [
                 'required',
@@ -139,7 +125,7 @@ class RequestApiController extends Controller
             $requests->push($request);
         }
 
-        return $this->resourceCollectionResponse($requests, $format);
+        return $this->response->resourceCollectionResponse($requests);
     }
 
     /**
