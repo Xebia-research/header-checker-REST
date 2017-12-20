@@ -33,6 +33,7 @@ class RequestsController extends Controller
             'endpoint',
             'profile',
             'requestHeaders',
+            'requestParameters',
             'responses',
             'responses.responseHeaders',
         ])->findOrFail($requestId);
@@ -69,6 +70,18 @@ class RequestsController extends Controller
                 'max:255',
             ],
             'request_headers.*.value' => [
+                'required',
+                'string',
+                'max:16777215',
+            ],
+            'request_parameters' => 'array',
+            'request_parameters.*.name' => [
+                'required',
+                'string',
+                'alpha_dash',
+                'max:255',
+            ],
+            'request_parameters.*.value' => [
                 'required',
                 'string',
                 'max:16777215',
@@ -117,6 +130,18 @@ class RequestsController extends Controller
                 'string',
                 'max:16777215',
             ],
+            'requests.*.request_parameters' => 'array',
+            'requests.*.request_parameters.*.name' => [
+                'required',
+                'string',
+                'alpha_dash',
+                'max:255',
+            ],
+            'requests.*.request_parameters.*.value' => [
+                'required',
+                'string',
+                'max:16777215',
+            ],
         ]);
 
         $requests = collect();
@@ -147,6 +172,7 @@ class RequestsController extends Controller
             'profile_id' => $profile->id,
         ]);
         $request->requestHeaders()->createMany(data_get($parameters, 'request_headers', []));
+        $request->requestParameters()->createMany(data_get($parameters, 'request_parameters', []));
 
         $this->dispatch(new ExecuteRequestJob($request));
 

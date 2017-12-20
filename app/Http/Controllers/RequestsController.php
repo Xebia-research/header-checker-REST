@@ -19,6 +19,7 @@ class RequestsController extends Controller
             'endpoint',
             'profile',
             'requestHeaders',
+            'requestParameters',
             'responses',
             'responses.responseHeaders',
         ])->findOrFail($requestId);

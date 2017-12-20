@@ -44,6 +44,17 @@
                             @endforeach
                         </dl>
                     @endif
+
+                    @if ($request->requestParameters->count() > 0)
+                        <h4>Request parameters</h4>
+
+                        <dl class="row">
+                            @foreach ($request->requestParameters as $requestParameter)
+                                <dt class="col-sm-3">{{$requestParameter->name}}</dt>
+                                <dd class="col-sm-9">{{$requestParameter->value}}</dd>
+                            @endforeach
+                        </dl>
+                    @endif
                 </div>
             </div>
         </div>
