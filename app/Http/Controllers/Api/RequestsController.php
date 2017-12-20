@@ -7,7 +7,7 @@ use App\Endpoint;
 use App\Request;
 use App\Jobs\ExecuteRequestJob;
 
-class RequestApiController extends Controller
+class RequestsController extends Controller
 {
     /**
      * Get all requests from the database.

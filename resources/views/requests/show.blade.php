@@ -88,32 +88,24 @@
 
                                 <tbody>
                                 @foreach ($response->findings as $finding)
-                                    @if ($finding['risk_level'] == 'critical')
-                                        <tr class="table-danger">
-                                    @elseif ($finding['risk_level'] == 'high')
-                                        <tr class="table-warning">
-                                    @elseif ($finding['risk_level'] == 'moderate')
-                                        <tr class="table-secondary">
-                                    @else
-                                        <tr>
+                                    <tr>
+                                        <td>
+                                            <strong>{{$finding['name']}}</strong>
+                                            @if ($finding['description'])
+                                                <br>
+                                                {{$finding['description']}}
                                             @endif
-                                            <td>
-                                                <strong>{{$finding['name']}}</strong>
-                                                @if ($finding['description'])
-                                                    <br>
-                                                    {{$finding['description']}}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{$finding['validation_type']}}
-                                                @if ($finding['validation_value'])
-                                                    <br>
-                                                    {{$finding['validation_value']}}
-                                                @endif
-                                            </td>
-                                            <td>{{$finding['risk_level']}}</td>
-                                        </tr>
-                                        @endforeach
+                                        </td>
+                                        <td>
+                                            {{$finding['validation_type']}}
+                                            @if ($finding['validation_value'])
+                                                <br>
+                                                {{$finding['validation_value']}}
+                                            @endif
+                                        </td>
+                                        <td>{{$finding['risk_level']}}</td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         @else
