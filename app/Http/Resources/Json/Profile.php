@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Html;
+namespace App\Http\Resources\Json;
 
-use App\Http\Resources\Types\Html\Resource;
+use Illuminate\Http\Resources\Json\Resource;
 
-class Request extends Resource
+class Profile extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,8 @@ class Request extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'name' => $this->name,
+        ];
     }
 }

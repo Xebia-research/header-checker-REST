@@ -50,6 +50,7 @@ class ExecuteRequestJob extends Job
                     'on_redirect' => $onRedirect,
                 ],
                 'headers' => $this->endpointRequest->requestHeaders->pluck('value', 'name')->toArray(),
+                'form_params' => $this->endpointRequest->requestParameters->pluck('value', 'name')->toArray(),
             ]);
 
             dispatch(new ParseResponseJob($this->endpointRequest, $response));
