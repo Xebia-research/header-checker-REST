@@ -49,7 +49,7 @@ class ExecuteRequestJob extends Job
                     'max' => 10,
                     'on_redirect' => $onRedirect,
                 ],
-                'headers' => $this->endpointRequest->requestHeaders->pluck('value', 'name')->toArray(),
+                'headers' => $this->getHeaders(),
                 'form_params' => $this->endpointRequest->requestParameters->pluck('value', 'name')->toArray(),
             ]);
 
@@ -58,5 +58,19 @@ class ExecuteRequestJob extends Job
             $this->endpointRequest->error_message = $e->getMessage();
             $this->endpointRequest->save();
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getHeaders(): array
+    {
+        $headers = $this->endpointRequest->requestHeaders->pluck('value', 'name');
+
+        if (!$headers->has('User-Agent') && $this->endpointRequest->profile->user_agent) {
+            $headers->put('User-Agent', $this->endpointRequest->profile->user_agent);
+        }
+
+        return $headers->toArray();
     }
 }

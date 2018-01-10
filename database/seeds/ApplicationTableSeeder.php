@@ -12,6 +12,8 @@ class ApplicationTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('applications')->truncate();
+
         $application = new Application;
         $application->name = 'Demo';
         $application->api_key = 'demo';
