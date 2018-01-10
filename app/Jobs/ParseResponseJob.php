@@ -11,27 +11,29 @@ class ParseResponseJob extends Job
     /**
      * @var EndpointRequest
      */
-    private $request;
+    private $endpointRequest;
 
     /**
+     * The ResponseInterface that should be parsed.
+     *
      * @var ResponseInterface
      */
     private $response;
 
     /**
-     * @param EndpointRequest $request
+     * @param EndpointRequest $endpointRequest
      * @param ResponseInterface $response
      */
-    public function __construct(EndpointRequest $request, ResponseInterface $response)
+    public function __construct(EndpointRequest $endpointRequest, ResponseInterface $response)
     {
-        $this->request = $request;
+        $this->endpointRequest = $endpointRequest;
         $this->response = $response;
     }
 
     public function handle()
     {
         /** @var Response $response */
-        $response = $this->request->responses()->create([
+        $response = $this->endpointRequest->responses()->create([
             'status_code' => $this->response->getStatusCode(),
             'reason_phrase' => $this->response->getReasonPhrase(),
         ]);
@@ -55,5 +57,7 @@ class ParseResponseJob extends Job
         }
 
         $response->responseHeaders()->createMany($responseHeaders);
+
+        dispatch(new ValidateResponseJob($response, $this->endpointRequest->profile));
     }
 }

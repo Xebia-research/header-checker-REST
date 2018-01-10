@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Html;
+namespace App\Http\Resources\Json;
 
-use App\Http\Resources\Types\Html\ResourceCollection;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class RequestCollection extends ResourceCollection
+class EndpointCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

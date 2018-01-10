@@ -82,9 +82,9 @@ if ($app->environment() !== 'production') {
     $app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
 }
 
-// $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\ResponseServiceProvider::class);
+$app->register(App\Providers\ValidationServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +101,13 @@ $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
+});
+
+$app->router->group([
+    'namespace' => 'App\Http\Controllers\Api',
+    'prefix' => 'api',
+], function ($router) {
+    require __DIR__.'/../routes/api.php';
 });
 
 return $app;

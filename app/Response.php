@@ -19,6 +19,15 @@ class Response extends Model
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'findings' => 'array',
+    ];
+
+    /**
      * Relationship between Request and Response models.
      *
      * @return BelongsTo
