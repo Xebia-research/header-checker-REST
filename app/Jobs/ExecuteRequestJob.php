@@ -67,7 +67,7 @@ class ExecuteRequestJob extends Job
     {
         $headers = $this->endpointRequest->requestHeaders->pluck('value', 'name');
 
-        if (!$headers->has('User-Agent') && $this->endpointRequest->profile->user_agent) {
+        if (! $headers->has('User-Agent') && $this->endpointRequest->profile->user_agent) {
             $headers->put('User-Agent', $this->endpointRequest->profile->user_agent);
         }
 
