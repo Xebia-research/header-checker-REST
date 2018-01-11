@@ -6,7 +6,7 @@ then
 echo "Setup is starting..."
 
 else
-    echo exiting...
+    echo Exiting...
         exit 0
 fi
 
@@ -86,17 +86,39 @@ read rootpw
 #Docker mariaDB ROOT password
 sed -i -- 's/MARIADB_ROOT_PASSWORD_PROD=.*/MARIADB_ROOT_PASSWORD_PROD='$rootpw'/g' ../resources/.env
 
-
-echo "$(tput setaf 1)---Set permissions for storage folder...$(tput sgr0)"
+echo "$(tput setaf 1)---Setting up right permissions for storage folder...$(tput sgr0)"
 
 chmod -R 777 ../storage
 
+read -r -p "Do you want to pull Docker containers? [y/N] " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
+then
+
+echo "Pulling Docker containers..."
+docker-compose pull
+else
+    echo "Continue..."
+fi
+
+read -r -p "Do you want to start Docker containers? [y/N] " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
+then
+
+echo "$(tput setaf 1)---Starting containers...$(tput sgr0)"
+docker-compose up -d
+sleep 12
+echo "$(tput setaf 1)---Listing running containers...$(tput sgr0)"
+sleep 3
+docker-compose ps
 echo "$(tput setaf 1)---Starting PHP Artisan migrate...$(tput sgr0)"
-
+sleep 3
 php artisan migrate
-
 echo "$(tput setaf 1)---Starting PHP Artisan DB:SEED...$(tput sgr0)"
-
+sleep 3
 php artisan db:seed
+
+else
+    echo "Continue..."
+fi
 
 echo "$(tput setaf 2)---Setup finished...$(tput sgr0)"
