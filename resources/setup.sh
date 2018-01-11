@@ -89,7 +89,7 @@ sed -i -- 's/MARIADB_ROOT_PASSWORD_PROD=.*/MARIADB_ROOT_PASSWORD_PROD='$rootpw'/
 
 echo "$(tput setaf 1)---Set permissions for storage folder...$(tput sgr0)"
 
-chmod -R 777 ../storage/
+chmod -R 777 ../storage
 
 echo "$(tput setaf 1)---Starting PHP Artisan migrate...$(tput sgr0)"
 
