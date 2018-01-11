@@ -29,66 +29,8 @@ services:
     depends_on:
       - "${ENGINE}"
 
-#  mariadb-acc:
-#     image: xebiaheaderchecker/mariadb:latest
-#     ports:
-#       - "${MARIADB_PORT_ACC}:3306"
-#     volumes:
-#       - ${DATA_SAVE_PATH_ACC}:/var/lib/mysql
-#     environment:
-#       - MYSQL_DATABASE=${MARIADB_DATABASE_ACC}
-#       - MYSQL_USER=${MARIADB_USER_ACC}
-#       - MYSQL_PASSWORD=${MARIADB_PASSWORD_ACC}
-#       - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD_ACC}
-#     depends_on:
-#       - "${ENGINE}"
-
   composer:
-    image: xebiaheaderchecker/composer:7.1
+    image: xebiaheaderchecker/composer:latest
     command: install
     volumes:
       - ${XEBIA_ROOT}:/app
-
-#  phpmyadmin:
-#    image: phpmyadmin/phpmyadmin:latest
-#    environment:
-#      - PMA_ARBITRARY=1
-#      - MYSQL_USER=${PMA_USER}
-#      - MYSQL_PASSWORD=${PMA_PASSWORD}
-#      - MYSQL_ROOT_PASSWORD=${PMA_ROOT_PASSWORD}
-#    ports:
-#      - "${PMA_PORT}:80"
-#    depends_on:
-#      - "${PMA_DB_ENGINE}"
-#    links:
-#      - mariadb-acc
-#      - mariadb-prod
-
-#  anchore-engine:
-    #image: "anchore-engine"
-#    image: docker.io/anchore/anchore-engine:latest
-    #privileged: true
-#    depends_on:
-#     - anchore-db
-#    ports:
-#     - "8228:8228"
-#     - "8338:8338"
-#    volumes:
-#     - ./anchore/config:/config/:Z
-#     - /var/run/docker.sock:/var/run/docker.sock
-#    logging:
-#     driver: "json-file"
-#     options:
-#      max-size: 100m
-
-#  anchore-db:
-#    image: "postgres:9"
-#    volumes:
-#     - ./anchore/db/:/var/lib/postgresql/data/pgdata/:Z
-#    environment:
-#      - POSTGRES_PASSWORD=${ANCHORE_PASS}
-#      - PGDATA=/var/lib/postgresql/data/pgdata/
-#    logging:
-#     driver: "json-file"
-#     options:
-#      max-size: 100m
