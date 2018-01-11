@@ -1,0 +1,36 @@
+version: '3.1'
+services:
+  php:
+    image: xebiaheaderchecker/php-fpmsql:latest
+    volumes:
+     - ${XEBIA_ROOT}:/code
+
+  nginx:
+    image: xebiaheaderchecker/nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ${XEBIA_ROOT}:/code
+      - ${SITE_CONF}:/etc/nginx/conf.d/default.conf
+    links:
+      - php
+
+  mariadb-prod:
+    image: xebiaheaderchecker/mariadb:latest
+    ports:
+      - "${MARIADB_PORT_PROD}:3306"
+    volumes:
+      - ${DATA_SAVE_PATH_PROD}:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MARIADB_DATABASE_PROD}
+      - MYSQL_USER=${MARIADB_USER_PROD}
+      - MYSQL_PASSWORD=${MARIADB_PASSWORD_PROD}
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD_PROD}
+    depends_on:
+      - "${ENGINE}"
+
+  composer:
+    image: xebiaheaderchecker/composer:latest
+    command: install
+    volumes:
+      - ${XEBIA_ROOT}:/app
