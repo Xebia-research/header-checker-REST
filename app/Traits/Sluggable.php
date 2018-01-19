@@ -12,7 +12,7 @@ trait Sluggable
     public static function bootSluggable()
     {
         static::creating(function (Model $model) {
-            $model->attributes[$model->slugColumn] = str_slug($model->attributes[$model->slugValueColumn]);
+            $model->attributes[$model->slugColumn] = str_slug($model->attributes[$model->slugValueColumn], '_');
         });
     }
 }
