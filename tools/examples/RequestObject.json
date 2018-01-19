@@ -1,76 +1,36 @@
 {
   "requests": [{
-      "url": "http://google.nl",
+      "url": "https://instagram.com",
       "method": "GET",
-      "profile": "api",
-
-      "requestHeaders": [{
-          "key": "",
-          "value": ""
-        },
-        {
-          "key": "",
-          "value": ""
-        }
-      ],
-
-      "requestBodies": [{
-          "key": "",
-          "value": ""
-        },
-        {
-          "key": "",
-          "value": ""
-        }
-      ]
+      "profile": "static_website",
     },
     {
-      "url": "http://xebia.com",
+      "url": "https://xebia.com",
       "method": "GET",
-      "profile": "api",
-
-      "requestHeaders": [{
-          "key": "",
-          "value": ""
-        },
-        {
-          "key": "",
-          "value": ""
-        }
-      ],
-
-      "requestBodies": [{
-          "key": "",
-          "value": ""
-        },
-        {
-          "key": "",
-          "value": ""
-        }
-      ]
+      "profile": "chrome",
     },
     {
       "url": "http://hva.nl",
       "method": "GET",
+      "profile": "secure_connection",
+    },
+    {
+      "url": "https://slack.com/api/api.test",
+      "method": "POST",
       "profile": "api",
 
       "requestHeaders": [{
-          "key": "",
-          "value": ""
-        },
-        {
-          "key": "",
-          "value": ""
-        }
-      ],
+        "key": "Content-Type",
+        "value": "application/x-www-form-urlencoded"
+      }],
 
       "requestBodies": [{
-          "key": "",
-          "value": ""
+          "key": "foo",
+          "value": "bar"
         },
         {
-          "key": "",
-          "value": ""
+          "key": "error",
+          "value": "my_error"
         }
       ]
     }
