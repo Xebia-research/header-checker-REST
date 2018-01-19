@@ -1,0 +1,78 @@
+{
+  "requests": [{
+      "url": "http://google.nl",
+      "method": "GET",
+      "profile": "api",
+
+      "requestHeaders": [{
+          "key": "",
+          "value": ""
+        },
+        {
+          "key": "",
+          "value": ""
+        }
+      ],
+
+      "requestBodies": [{
+          "key": "",
+          "value": ""
+        },
+        {
+          "key": "",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "url": "http://xebia.com",
+      "method": "GET",
+      "profile": "api",
+
+      "requestHeaders": [{
+          "key": "",
+          "value": ""
+        },
+        {
+          "key": "",
+          "value": ""
+        }
+      ],
+
+      "requestBodies": [{
+          "key": "",
+          "value": ""
+        },
+        {
+          "key": "",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "url": "http://hva.nl",
+      "method": "GET",
+      "profile": "api",
+
+      "requestHeaders": [{
+          "key": "",
+          "value": ""
+        },
+        {
+          "key": "",
+          "value": ""
+        }
+      ],
+
+      "requestBodies": [{
+          "key": "",
+          "value": ""
+        },
+        {
+          "key": "",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

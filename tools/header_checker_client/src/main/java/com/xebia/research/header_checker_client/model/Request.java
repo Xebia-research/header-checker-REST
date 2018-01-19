@@ -1,6 +1,7 @@
 package com.xebia.research.header_checker_client.model;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 public class Request {
@@ -14,9 +15,6 @@ public class Request {
     @SerializedName("created_at")
     private Date createdAt;
 
-//    @SerializedName("updated_at")
-//    private Date updatedAt;
-
     public Integer getId() {
         return id;
     }
@@ -28,8 +26,4 @@ public class Request {
     public Date getCreatedAt() {
         return createdAt;
     }
-
-//    public Date getUpdatedAt() {
-//        return updatedAt;
-//    }
 }

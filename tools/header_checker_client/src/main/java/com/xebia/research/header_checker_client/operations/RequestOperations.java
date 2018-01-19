@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class RequestOperations {
 
-    // Do a single Store Request Call
-    public static void makeStoreRequestCall(RequestsList lstRequestObject, String outFormat, String outFile, String token) {
-        Retrofit retrofit = Connectivity.getRetrofit(token, outFormat);
+    // Make a storeRequestCall on the API
+    public static void makeStoreRequestCall(RequestsList lstRequestObject, String outFile, String token) {
+        Retrofit retrofit = Connectivity.getRetrofit(token);
         RequestService requestService = retrofit.create(RequestService.class);
         if (lstRequestObject.getRequests().size() > 0) {
             Call<HeaderCheckerResponse<ArrayList<Request>>> storeRequestCall = requestService.store(lstRequestObject);
@@ -33,7 +33,6 @@ public class RequestOperations {
                             System.out.println("CreatedAt: " + req.getCreatedAt() + "\n");
                         }
                     }
-
                 } else {
                     System.out.println("Request Failure");
                     System.out.println(response.errorBody().string());

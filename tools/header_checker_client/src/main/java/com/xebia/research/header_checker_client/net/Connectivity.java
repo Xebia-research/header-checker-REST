@@ -13,22 +13,22 @@ import java.io.IOException;
 import java.net.URL;
 
 public class Connectivity {
-    //    private static String baseUrl = "http://127.0.0.1/header-checker-REST/public/api/";
+//    private static String baseUrl = "http://127.0.0.1/api/";
     private static String baseUrl = "http://178.84.93.68/api/";
     private static String AUTH = "Authorization";
     private static String BEARER = "Bearer ";
     private static String CONTENT_TYPE = "Content-Type";
-    private static String APPLICATION = "application/";
+    private static String APPLICATION_JSON = "application/json";
 
-    public static Retrofit getRetrofit(String token, String outFormat) {
+    public static Retrofit getRetrofit(String token) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(getGson()))
-                .client(getOkHttpClientBuilder(token, outFormat))
+                .client(getOkHttpClientBuilder(token))
                 .build();
     }
 
-    private static OkHttpClient getOkHttpClientBuilder(String token, String outFormat) {
+    private static OkHttpClient getOkHttpClientBuilder(String token) {
         OkHttpClient.Builder mOkHttpClientBuilder = new OkHttpClient.Builder();
         mOkHttpClientBuilder.addInterceptor(new Interceptor() {
             @Override
@@ -36,16 +36,10 @@ public class Connectivity {
                 Request original = chain.request();
                 Request.Builder requestBuilder;
 
-                if (!outFormat.equals("")) {
                     requestBuilder = original.newBuilder()
                             .header(AUTH, BEARER + token)
-                            .header(CONTENT_TYPE, APPLICATION + outFormat)
+                            .header(CONTENT_TYPE, APPLICATION_JSON)
                             .method(original.method(), original.body());
-                } else {
-                    requestBuilder = original.newBuilder()
-                            .header(AUTH, BEARER + token)
-                            .method(original.method(), original.body());
-                }
 
                 Request request = requestBuilder.build();
 

@@ -1,7 +1,6 @@
 package com.xebia.research.header_checker_client.model;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class RequestObject {
@@ -31,13 +30,5 @@ public class RequestObject {
 
     public void setProfile(String profile) {
         this.profile = profile;
-    }
-
-    public void setRequestHeaders(List<RequestHeader> requestHeaders) {
-        this.requestHeaders = requestHeaders;
-    }
-
-    public void setRequestBodies(List<RequestBody> requestBodies) {
-        this.requestBodies = requestBodies;
     }
 }

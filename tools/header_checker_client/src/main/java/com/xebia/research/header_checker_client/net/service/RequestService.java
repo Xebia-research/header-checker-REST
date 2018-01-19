@@ -16,9 +16,4 @@ public interface RequestService {
     Call<HeaderCheckerResponse<ArrayList<Request>>> store(
             @Body RequestsList requestObject
     );
-
-//    @POST("requests/batch")
-//    Call<String> store(
-//            @Body RequestsList requestObject
-//    );
 }
