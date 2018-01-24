@@ -24,6 +24,12 @@ echo "Continue..."
 
 fi
 
+
+echo "$(tput setaf 1)---Parse AppArmor profile for Docker container...$(tput sgr0)"
+sleep 3
+apparmor_parser -r -W ./AppArmor-Docker/docker_nginx
+
+
 # Request database name
 echo "$(tput setab 1)Please enter a database name. $(tput sgr0)"
 
@@ -106,9 +112,9 @@ then
 
 echo "$(tput setaf 1)---Starting containers...$(tput sgr0)"
 docker-compose up -d
-sleep 10
+sleep 8
 echo "$(tput setaf 1)---Listing running containers...$(tput sgr0)"
-sleep 3
+sleep 2
 docker-compose ps
 echo "$(tput setaf 1)---Starting PHP Artisan migrate...$(tput sgr0)"
 sleep 3
