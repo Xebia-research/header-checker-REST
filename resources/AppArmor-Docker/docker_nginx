@@ -72,3 +72,4 @@ profile docker-nginx flags=(attach_disconnected,mediate_deleted) {
     deny /sys/fs/cg[^r]*/** wklx,
     deny /sys/firmware/** rwklx,
     deny /sys/kernel/security/** rwklx,
+  }
