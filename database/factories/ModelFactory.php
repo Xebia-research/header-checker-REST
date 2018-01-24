@@ -74,7 +74,7 @@ $factory->define(App\HeaderRule::class, function (Faker\Generator $faker) {
         ]),
         'validation_value' => $faker->optional()->sha256,
         'risk_level' => $faker->randomElement([
-            'low', 'moderate', 'high', 'critical',
+            '-', 'low', 'medium', 'high',
         ]),
     ];
 });
@@ -106,23 +106,23 @@ $factory->state(App\HeaderRule::class, 'validation_regex', function () {
 /*
  * Header Rules - Risk Levels
  */
+$factory->state(App\HeaderRule::class, 'risk_dash', function () {
+    return [
+        'risk_level' => '-',
+    ];
+});
 $factory->state(App\HeaderRule::class, 'risk_low', function () {
     return [
         'risk_level' => 'low',
     ];
 });
-$factory->state(App\HeaderRule::class, 'risk_moderate', function () {
+$factory->state(App\HeaderRule::class, 'risk_medium', function () {
     return [
-        'risk_level' => 'moderate',
+        'risk_level' => 'medium',
     ];
 });
 $factory->state(App\HeaderRule::class, 'risk_high', function () {
     return [
         'risk_level' => 'high',
-    ];
-});
-$factory->state(App\HeaderRule::class, 'risk_critical', function () {
-    return [
-        'risk_level' => 'critical',
     ];
 });

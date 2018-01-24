@@ -13,9 +13,11 @@ class HeaderRuleTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('header_rules')->truncate();
+        HeaderRule::truncate();
 
-        $headerRules = collect();
+        $apiHeaderRules = collect();
+        $webHeaderRules = collect();
+        $secureHeaderRules = collect();
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-XSS-Protection';
@@ -23,6 +25,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'medium';
         $headerRule->save();
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-XSS-Protection';
@@ -31,6 +34,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^1(; mode=block)?/i';
         $headerRule->risk_level = 'medium';
         $headerRule->save();
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Content-Security-Policy'; // Used by Chrome version 25 and later, Firefox version 23 and later, Opera version 19 and later
@@ -40,6 +44,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Content-Security-Policy'; // Used by Chrome version 25 and later, Firefox version 23 and later, Opera version 19 and later
@@ -50,6 +56,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^default-src|script-src|object-src|style-src|img-src|media-src|frame-src|font-src|connect-src|form-action|script-nonce|plugin-types|reflected-xss/i';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-Content-Security-Policy'; // Used by Firefox until version 23, and Internet Explorer version 10
@@ -59,6 +67,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-Content-Security-Policy'; // Used by Firefox until version 23, and Internet Explorer version 10
@@ -69,6 +79,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^default-src|script-src|object-src|style-src|img-src|media-src|frame-src|font-src|connect-src|form-action|script-nonce|plugin-types|reflected-xss/i';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-WebKit-CSP'; // Used by Chrome until version 25
@@ -78,6 +90,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-WebKit-CSP'; // Used by Chrome until version 25
@@ -88,6 +102,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^default-src|script-src|object-src|style-src|img-src|media-src|frame-src|font-src|connect-src|form-action|script-nonce|plugin-types|reflected-xss/i';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-Content-Type-Options';
@@ -95,6 +111,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'medium';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-Content-Type-Options';
@@ -103,6 +121,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/nosniff/i';
         $headerRule->risk_level = 'medium';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-Frame-Options';
@@ -110,6 +130,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'medium';
         $headerRule->save();
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'X-Frame-Options';
@@ -118,6 +139,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^DENY|SAMEORIGIN|ALLOW-FROM$/i';
         $headerRule->risk_level = 'medium';
         $headerRule->save();
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Strict-Transport-Security';
@@ -125,6 +147,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'medium';
         $headerRule->save();
+        $secureHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Strict-Transport-Security';
@@ -133,6 +156,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^max-age=[0-9]*(; includeSubDomains|; preload)*$/i';
         $headerRule->risk_level = 'medium';
         $headerRule->save();
+        $secureHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Cache-Control';
@@ -140,6 +164,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'high';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Cache-Control';
@@ -148,6 +174,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^private|no-cache|must-revalidate$/i';
         $headerRule->risk_level = 'high';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Pragma';
@@ -156,6 +184,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value;
         $headerRule->risk_level = 'high';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Pragma';
@@ -164,6 +194,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^no-cache$/i';
         $headerRule->risk_level = 'high';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Public-Key-Pins';
@@ -171,6 +203,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $secureHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Referrer-Policy';
@@ -178,6 +211,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = '-';
         $headerRule->save();
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Referrer-Policy';
@@ -186,6 +220,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^no-referrer|no-referrer-when-downgrade|origin|origin-when-cross-origin|same-origin|strict-origin|strict-origin-when-cross-origin$/';
         $headerRule->risk_level = '-';
         $headerRule->save();
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Expect-ct';
@@ -193,6 +228,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'required';
         $headerRule->risk_level = '-';
         $headerRule->save();
+        $secureHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Expect-ct';
@@ -201,14 +237,16 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/^max-age=[0-9]*, enforce, report-uri=/i';
         $headerRule->risk_level = '-';
         $headerRule->save();
+        $secureHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Set-Cookie';
         $headerRule->description = 'HttpOnly, cannot be accessed from within JavaScript. So if there is an XSS flaw, attackers can’t immediately steal the cookies.';
         $headerRule->validation_type = 'regex';
-        $headerRule->validation_value = '/httponly/gi';
+        $headerRule->validation_value = '/httponly/i';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'Set-Cookie';
@@ -217,6 +255,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_value = '/samesite/i';
         $headerRule->risk_level = 'low';
         $headerRule->save();
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'x-powered-by';
@@ -224,6 +263,8 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'prohibit';
         $headerRule->risk_level = 'high';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
         $headerRule = new HeaderRule;
         $headerRule->name = 'server';
@@ -231,10 +272,25 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule->validation_type = 'prohibit';
         $headerRule->risk_level = 'high';
         $headerRule->save();
+        $apiHeaderRules->push($headerRule);
+        $webHeaderRules->push($headerRule);
 
-        $profiles = Profile::all();
-        foreach ($profiles as $profile) {
-            $profile->headerRules()->attach($headerRules->pluck('id'));
-        }
+        $apiProfiles = Profile::whereIdentifier('api')
+            ->get();
+        $apiProfiles->each(function (Profile $profile) use ($apiHeaderRules) {
+            $profile->headerRules()->attach($apiHeaderRules->pluck('id'));
+        });
+
+        $webProfiles = Profile::where('identifier', '!=', 'api')
+            ->get();
+        $webProfiles->each(function (Profile $profile) use ($webHeaderRules) {
+            $profile->headerRules()->attach($webHeaderRules->pluck('id'));
+        });
+
+        $secureProfiles = Profile::whereIdentifier('secure_connection_https')
+            ->get();
+        $secureProfiles->each(function (Profile $profile) use ($secureHeaderRules) {
+            $profile->headerRules()->attach($secureHeaderRules->pluck('id'));
+        });
     }
 }
