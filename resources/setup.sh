@@ -27,7 +27,7 @@ fi
 
 echo "$(tput setaf 1)---Parse AppArmor profile for Docker container...$(tput sgr0)"
 sleep 3
-sudo apparmor_parser -r -W ./AppArmor-Docker/docker_nginx
+apparmor_parser -r -W ./AppArmor-Docker/docker_nginx
 
 
 # Request database name
