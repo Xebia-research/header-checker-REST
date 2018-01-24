@@ -33,8 +33,8 @@ profile docker-nginx flags=(attach_disconnected,mediate_deleted) {
   deny /tmp/** wl,
   deny /sys/** wl,
   deny /usr/** wl,
-  deny /code/ wr,
-  deny /code/** wr,
+  deny /code/ wlr,
+  deny /code/** wlr,
 
   audit /** w,
 
