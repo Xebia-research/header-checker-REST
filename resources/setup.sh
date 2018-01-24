@@ -112,9 +112,9 @@ then
 
 echo "$(tput setaf 1)---Starting containers...$(tput sgr0)"
 docker-compose up -d
-sleep 10
+sleep 8
 echo "$(tput setaf 1)---Listing running containers...$(tput sgr0)"
-sleep 3
+sleep 2
 docker-compose ps
 echo "$(tput setaf 1)---Starting PHP Artisan migrate...$(tput sgr0)"
 sleep 3
