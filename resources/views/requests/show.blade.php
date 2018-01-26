@@ -92,8 +92,8 @@
                                 <thead>
                                 <tr>
                                     <th>Header name</th>
-                                    <th>Validation type</th>
-                                    <th>Risk level</th>
+                                    <th width="80px">Validation</th>
+                                    <th width="110px" style="text-align: right;">Risk level</th>
                                 </tr>
                                 </thead>
 
@@ -114,7 +114,24 @@
                                                 {{$finding['validation_value']}}
                                             @endif
                                         </td>
-                                        <td>{{$finding['risk_level']}}</td>
+                                        <td style="text-align: right;">
+                                            @switch ($finding['risk_level'])
+                                                @case ('low')
+                                                <span class="badge badge-pill badge-info">{{ucfirst($finding['risk_level'])}}</span>
+                                                @break
+
+                                                @case ('medium')
+                                                <span class="badge badge-pill badge-warning">{{ucfirst($finding['risk_level'])}}</span>
+                                                @break
+
+                                                @case ('high')
+                                                <span class="badge badge-pill badge-danger">{{ucfirst($finding['risk_level'])}}</span>
+                                                @break
+
+                                                @default
+                                                <span class="badge badge-pill badge-light">{{ucfirst($finding['risk_level'])}}</span>
+                                            @endswitch
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

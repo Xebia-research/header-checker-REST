@@ -32,10 +32,10 @@ class CreateHeaderRulesTable extends Migration
                 ->nullable();
 
             $table->enum('risk_level', [
+                '-',
                 'low',
-                'moderate',
+                'medium',
                 'high',
-                'critical',
             ]);
 
             $table->timestamps();
