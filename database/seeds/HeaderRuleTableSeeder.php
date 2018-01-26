@@ -180,7 +180,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule = new HeaderRule;
         $headerRule->name = 'Pragma';
         $headerRule->description = 'Pragma is the HTTP/1.0 implementation meant to prevent the client from caching the response.';
-        $headerRule->validation_type = 'regex';
+        $headerRule->validation_type = 'required';
         $headerRule->validation_value;
         $headerRule->risk_level = 'high';
         $headerRule->save();
@@ -233,7 +233,7 @@ class HeaderRuleTableSeeder extends Seeder
         $headerRule = new HeaderRule;
         $headerRule->name = 'Expect-ct';
         $headerRule->description = 'This is a new http header, that allows web host operators to instruct user agents to expect valid Signed Certificate Timestamps(SCTs) to be served on connections to these hosts. When configured in enforcement mode, user agents(UAs) will remember that hosts expect SCTs and will refuse connections that do not conform to the UA’s Certificate Transparency policy. When configured in report-only mode, UAs will report the lack of valid SCTs to a URI configured by the host, but will allow the connection. By turning on Expect-CT, web host operators can discover misconfigurations in their Certificate Transparency deployments and ensure that misused certificates accepted by UAs are discoverable in Certificate Transparency logs.';
-        $headerRule->validation_type = 'required';
+        $headerRule->validation_type = 'regex';
         $headerRule->validation_value = '/^max-age=[0-9]*, enforce, report-uri=/i';
         $headerRule->risk_level = '-';
         $headerRule->save();

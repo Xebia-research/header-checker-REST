@@ -24,11 +24,11 @@ class ProfileTableSeeder extends Seeder
 
         factory(Profile::class)->states('no_user_agent')->create([
             'name' => 'Plain Connection (HTTP)',
-            'identifier' => 'plain_connection',
+            // 'identifier' => 'plain_connection',
         ]);
         factory(Profile::class)->states('no_user_agent')->create([
             'name' => 'Secure Connection (HTTPS)',
-            'identifier' => 'secure_connection',
+            // 'identifier' => 'secure_connection',
         ]);
 
         factory(Profile::class)->states('chrome')->create();
