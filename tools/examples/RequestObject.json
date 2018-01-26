@@ -1,38 +1,40 @@
 {
-  "requests": [{
-      "url": "https://instagram.com",
-      "method": "GET",
-      "profile": "static_website",
-    },
-    {
-      "url": "https://xebia.com",
-      "method": "GET",
-      "profile": "chrome",
-    },
-    {
-      "url": "http://hva.nl",
-      "method": "GET",
-      "profile": "secure_connection",
-    },
-    {
-      "url": "https://slack.com/api/api.test",
-      "method": "POST",
-      "profile": "api",
-
-      "requestHeaders": [{
-        "key": "Content-Type",
-        "value": "application/x-www-form-urlencoded"
-      }],
-
-      "requestBodies": [{
-          "key": "foo",
-          "value": "bar"
+    "requests":[
+        {
+            "url":"https://instagram.com",
+            "method":"GET",
+            "profile":"static_website"
         },
         {
-          "key": "error",
-          "value": "my_error"
+            "url":"https://xebia.com",
+            "method":"GET",
+            "profile":"chrome"
+        },
+        {
+            "url":"http://hva.nl",
+            "method":"GET",
+            "profile":"secure_connection"
+        },
+        {
+            "url":"https://slack.com/api/api.test",
+            "method":"POST",
+            "profile":"api",
+            "requestHeaders":[
+                {
+                    "key":"Content-Type",
+                    "value":"application/x-www-form-urlencoded"
+                }
+            ],
+            "requestBodies":[
+                {
+                    "key":"foo",
+                    "value":"bar"
+                },
+                {
+                    "key":"error",
+                    "value":"my_error"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
